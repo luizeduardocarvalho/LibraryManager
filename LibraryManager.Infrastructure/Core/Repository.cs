@@ -49,9 +49,9 @@ namespace LibraryManager.Infrastructure.Core
             GC.SuppressFinalize(this);
         }
 
-        private int Commit()
+        private void Commit()
         {
-            return dbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
     }
 }
