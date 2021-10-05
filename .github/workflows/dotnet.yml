@@ -1,15 +1,10 @@
 name: .NET
 
 on:
-  pull_request:
-    paths-ignore:
-      - '**.md'
   push:
-    branches:
-      - main
-      - releases/*
-    paths-ignore:
-      - '**.md
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
