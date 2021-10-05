@@ -13,7 +13,7 @@ namespace LibraryManager.Domain.Entities.Configurations
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.Title).IsRequired();
-            builder.Property(x => x.Author).IsRequired();
+            builder.Property(x => x.AuthorId);
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
