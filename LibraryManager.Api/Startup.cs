@@ -8,6 +8,7 @@ namespace LibraryManager.Api
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Newtonsoft.Json;
     using System;
 
     public class Startup
@@ -19,7 +20,6 @@ namespace LibraryManager.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -29,6 +29,11 @@ namespace LibraryManager.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryManager.Api", Version = "v1" });
             });
 
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            );
+
             services.AddDbContext<LibraryManagerDbContext>(
                 options => 
                     options.UseNpgsql(
@@ -36,7 +41,6 @@ namespace LibraryManager.Api
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
