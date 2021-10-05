@@ -28,6 +28,8 @@
                 StudentId = 1
             };
 
+            var student = "test";
+
             this.context.Transactions.Add(transaction);
             this.context.SaveChanges();
 
