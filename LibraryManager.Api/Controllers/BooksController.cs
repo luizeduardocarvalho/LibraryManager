@@ -22,7 +22,7 @@
         {
             var book = new Book
             {
-                Author = "Luiz",
+                AuthorId = 1,
                 Title = "Author"
             };
 
