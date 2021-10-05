@@ -6,9 +6,13 @@
     {
         public bool Active { get; set; }
 
+        public Book Book { get; set; }
+
         public long BookId { get; set; }
 
         public DateTimeOffset CheckoutDate { get; set; }
+
+        public Student Student { get; set; }
 
         public long StudentId { get; set; }
 

@@ -3,15 +3,17 @@ using System;
 using LibraryManager.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LibraryManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryManagerDbContext))]
-    partial class LibraryManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211005141800_AddBookAndAuthor")]
+    partial class AddBookAndAuthor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 49, 53, 363, DateTimeKind.Unspecified).AddTicks(847), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 18, 0, 439, DateTimeKind.Unspecified).AddTicks(2003), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<bool>("IsRemoved")
                         .ValueGeneratedOnAdd()
@@ -61,15 +63,12 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 49, 53, 372, DateTimeKind.Unspecified).AddTicks(9012), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 18, 0, 446, DateTimeKind.Unspecified).AddTicks(6013), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<bool>("IsRemoved")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
-
-                    b.Property<long?>("StudentId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -80,72 +79,7 @@ namespace LibraryManager.Infrastructure.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("StudentId");
-
                     b.ToTable("Book");
-                });
-
-            modelBuilder.Entity("LibraryManager.Domain.Entities.Student", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 49, 53, 374, DateTimeKind.Unspecified).AddTicks(7747), new TimeSpan(0, 0, 0, 0, 0)));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsRemoved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<long>("TeacherId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Student");
-                });
-
-            modelBuilder.Entity("LibraryManager.Domain.Entities.Teacher", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 49, 53, 375, DateTimeKind.Unspecified).AddTicks(9150), new TimeSpan(0, 0, 0, 0, 0)));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsRemoved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Teacher");
                 });
 
             modelBuilder.Entity("LibraryManager.Domain.Entities.Transaction", b =>
@@ -165,14 +99,10 @@ namespace LibraryManager.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2021, 10, 5, 14, 49, 53, 376, DateTimeKind.Unspecified).AddTicks(9725), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsRemoved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("ReturnDate")
                         .HasColumnType("timestamp with time zone");
@@ -187,8 +117,6 @@ namespace LibraryManager.Infrastructure.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("StudentId");
-
                     b.ToTable("Transaction");
                 });
 
@@ -200,41 +128,16 @@ namespace LibraryManager.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryManager.Domain.Entities.Student", null)
-                        .WithMany("Books")
-                        .HasForeignKey("StudentId");
-
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("LibraryManager.Domain.Entities.Student", b =>
-                {
-                    b.HasOne("LibraryManager.Domain.Entities.Teacher", "Teacher")
-                        .WithMany("Students")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("LibraryManager.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("LibraryManager.Domain.Entities.Book", "Book")
+                    b.HasOne("LibraryManager.Domain.Entities.Book", null)
                         .WithMany("Transactions")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("LibraryManager.Domain.Entities.Student", "Student")
-                        .WithMany("Transactions")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("LibraryManager.Domain.Entities.Author", b =>
@@ -245,18 +148,6 @@ namespace LibraryManager.Infrastructure.Migrations
             modelBuilder.Entity("LibraryManager.Domain.Entities.Book", b =>
                 {
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("LibraryManager.Domain.Entities.Student", b =>
-                {
-                    b.Navigation("Books");
-
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("LibraryManager.Domain.Entities.Teacher", b =>
-                {
-                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

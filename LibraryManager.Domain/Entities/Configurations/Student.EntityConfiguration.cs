@@ -4,16 +4,17 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using System;
 
-    public sealed class BookEntityConfiguration : IEntityTypeConfiguration<Book>
+    public sealed class StudentEntityConfiguration : IEntityTypeConfiguration<Student>
     {
-        public void Configure(EntityTypeBuilder<Book> builder)
+        public void Configure(EntityTypeBuilder<Student> builder)
         {
-            builder.ToTable("Book")
+            builder.ToTable("Student")
                 .HasKey(x => x.Id);
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Title).IsRequired().HasMaxLength(150);
-            builder.Property(x => x.AuthorId);
+            builder.Property(x => x.Name);
+            builder.Property(x => x.Email);
+
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
@@ -21,8 +22,8 @@
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder.HasOne(x => x.Author)
-                .WithMany(x => x.Books);
+            builder.HasOne(x => x.Teacher)
+                .WithMany(x => x.Students);
         }
     }
 }
