@@ -3,6 +3,8 @@
     using LibraryManager.Domain.Entities;
     using LibraryManager.Infrastructure;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -20,16 +22,16 @@
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var book = new Book
+            var transaction = new Transaction
             {
-                AuthorId = 1,
-                Title = "Author"
+                BookId = 1,
+                StudentId = 1
             };
 
-            this.context.Books.Add(book);
+            this.context.Transactions.Add(transaction);
             this.context.SaveChanges();
 
-            return Ok(this.context.Books.First());
+            return Ok(this.context.Transactions.Include(x => x.Student).Include(x => x.Book).First());
         }
     }
 }
