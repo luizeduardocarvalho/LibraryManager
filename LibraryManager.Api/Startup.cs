@@ -1,6 +1,10 @@
 namespace LibraryManager.Api
 {
+    using LibraryManager.Domain.Abstractions.Services;
     using LibraryManager.Infrastructure;
+    using LibraryManager.Infrastructure.Repositories;
+    using LibraryManager.Infrastructure.Repositories.Abstractions;
+    using LibraryManager.Infrastructure.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -39,6 +43,13 @@ namespace LibraryManager.Api
                     options.UseNpgsql(
                         GetConnectionString(), 
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
+
+            // Repositories
+            services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
+
+            // Services
+            services.AddTransient<ITransactionService, TransactionService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
