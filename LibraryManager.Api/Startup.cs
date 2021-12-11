@@ -47,9 +47,15 @@ namespace LibraryManager.Api
             // Repositories
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ITransactionRepository, TransactionRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<ITeacherRepository, TeacherRepository>();
 
             // Services
             services.AddTransient<ITransactionService, TransactionService>();
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<ITeacherService, TeacherService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

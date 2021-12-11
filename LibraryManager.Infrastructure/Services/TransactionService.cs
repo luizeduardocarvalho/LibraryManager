@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Infrastructure.Services
 {
@@ -14,9 +15,15 @@ namespace LibraryManager.Infrastructure.Services
             this.repository = repository;
         }
 
-        IEnumerable<Transaction> ITransactionService.GetAll()
+        async Task<IEnumerable<Transaction>> ITransactionService.GetAll()
         {
-            var transactions = this.repository.GetAll();
+            var transactions = await this.repository.GetAll();
+            return transactions;
+        }
+
+        async Task<IEnumerable<Transaction>> ITransactionService.GetAllByBook(long bookId)
+        {
+            var transactions = await this.repository.GetAllByBook(bookId);
             return transactions;
         }
 

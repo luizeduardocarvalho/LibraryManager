@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Infrastructure.Repositories
 {
@@ -27,9 +28,9 @@ namespace LibraryManager.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public virtual IEnumerable<T> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            var entity = this.table.ToList();
+            var entity = await this.table.ToListAsync();
             return entity;
         }
 

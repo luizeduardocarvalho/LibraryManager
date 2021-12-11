@@ -7,11 +7,11 @@ namespace LibraryManager.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BooksController : ControllerBase
+    public class StudentsController : ControllerBase
     {
-        private readonly IBookService service;
+        private readonly IStudentService service;
 
-        public BooksController(IBookService service)
+        public StudentsController(IStudentService service)
         {
             this.service = service;
         }
@@ -19,14 +19,14 @@ namespace LibraryManager.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var books = await this.service.GetAll();
+            var students = await this.service.GetAll();
 
-            if (!books.Any())
+            if(!students.Any())
             {
-                return NotFound("No books have been found.");
+                return NotFound("No students have been found.");
             }
 
-            return Ok(books);
+            return Ok(students);
         }
     }
 }

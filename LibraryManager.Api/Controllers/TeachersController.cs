@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,11 +8,11 @@ namespace LibraryManager.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BooksController : ControllerBase
+    public class TeachersController : ControllerBase
     {
-        private readonly IBookService service;
+        private readonly ITeacherService service;
 
-        public BooksController(IBookService service)
+        public TeachersController(ITeacherService service)
         {
             this.service = service;
         }
@@ -19,14 +20,14 @@ namespace LibraryManager.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var books = await this.service.GetAll();
+            var teachers = await this.service.GetAll();
 
-            if (!books.Any())
+            if (!teachers.Any())
             {
-                return NotFound("No books have been found.");
+                return NotFound("No teachers have been found.");
             }
 
-            return Ok(books);
+            return Ok(teachers);
         }
     }
 }

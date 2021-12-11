@@ -1,5 +1,6 @@
 ﻿using LibraryManager.Domain.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Domain.Abstractions.Services
 {
@@ -7,6 +8,7 @@ namespace LibraryManager.Domain.Abstractions.Services
     {
         bool RentBook(long bookId, long studentId);
         bool ReturnBook();
-        IEnumerable<Transaction> GetAll();
+        Task<IEnumerable<Transaction>> GetAll();
+        Task<IEnumerable<Transaction>> GetAllByBook(long bookId);
     }
 }
