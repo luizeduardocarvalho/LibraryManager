@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System.Collections.Generic;
@@ -19,6 +20,20 @@ namespace LibraryManager.Infrastructure.Services
         {
             var teachers = await this.repository.GetAll();
             return teachers;
+        }
+
+        public async Task<bool> Create(CreateTeacherDto teacher)
+        {
+            var newTeacher = new Teacher
+            {
+                Name = teacher.Name,
+                Email = teacher.Email
+            };
+
+            this.repository.Insert(newTeacher);
+            var result = await this.repository.Save();
+
+            return result;
         }
     }
 }

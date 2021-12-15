@@ -44,6 +44,13 @@ namespace LibraryManager.Api
                         GetConnectionString(), 
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             // Repositories
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ITransactionRepository, TransactionRepository>();
@@ -70,6 +77,8 @@ namespace LibraryManager.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyPolicy");
 
             app.UseAuthorization();
 

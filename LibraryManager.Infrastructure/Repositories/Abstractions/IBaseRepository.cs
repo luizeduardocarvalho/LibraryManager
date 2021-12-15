@@ -10,6 +10,6 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
         void Insert(T obj);
         void Update(T obj);
         void Delete(object id);
-        void Save();
+        Task<bool> Save();
     }
 }

@@ -39,14 +39,21 @@ namespace LibraryManager.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        void IBaseRepository<T>.Insert(T obj)
+        public async void Insert(T obj)
         {
-            throw new NotImplementedException();
+            await this.table.AddAsync(obj);
         }
 
-        void IBaseRepository<T>.Save()
+        public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            var result = await this.context.SaveChangesAsync();
+
+            if(result > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         void IBaseRepository<T>.Update(T obj)

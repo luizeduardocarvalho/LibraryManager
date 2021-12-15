@@ -1,6 +1,8 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,13 +23,31 @@ namespace LibraryManager.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var teachers = await this.service.GetAll();
-
             if (!teachers.Any())
             {
                 return NotFound("No teachers have been found.");
             }
 
             return Ok(teachers);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateTeacherDto teacher)
+        {
+            if(teacher == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await this.service.Create(teacher);
+                return Ok("Teacher Created.");
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, e);
+            }
         }
     }
 }
