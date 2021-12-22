@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public sealed class Teacher : BaseEntity
+    public sealed class Teacher : User
     {
-        public string Email { get; set; }
-
         public string Name { get; set; }
 
         public IList<Student> Students { get; set; }

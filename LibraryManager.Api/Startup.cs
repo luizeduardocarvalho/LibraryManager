@@ -1,19 +1,26 @@
 namespace LibraryManager.Api
 {
+    using LibraryManager.Api.Configurations;
+    using LibraryManager.Api.Services;
     using LibraryManager.Domain.Abstractions.Services;
     using LibraryManager.Infrastructure;
     using LibraryManager.Infrastructure.Repositories;
     using LibraryManager.Infrastructure.Repositories.Abstractions;
     using LibraryManager.Infrastructure.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
     using System;
+    using Swashbuckle.AspNetCore.Swagger;
+    using System.Text;
+    using System.Collections.Generic;
 
     public class Startup
     {
@@ -31,6 +38,34 @@ namespace LibraryManager.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryManager.Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description =
+        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                    }
+                });
             });
 
             services.AddControllersWithViews()
@@ -39,9 +74,9 @@ namespace LibraryManager.Api
             );
 
             services.AddDbContext<LibraryManagerDbContext>(
-                options => 
+                options =>
                     options.UseNpgsql(
-                        GetConnectionString(), 
+                        GetConnectionString(),
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
@@ -50,6 +85,28 @@ namespace LibraryManager.Api
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            services.Configure<Settings>(Configuration.GetSection("Settings"));
+
+            services
+                .AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.ASCII.GetBytes(Configuration.GetSection("Settings").GetSection("Secret").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             // Repositories
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -63,6 +120,8 @@ namespace LibraryManager.Api
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ITeacherService, TeacherService>();
+            services.AddTransient<ITokenService, TokenService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,6 +138,8 @@ namespace LibraryManager.Api
             app.UseRouting();
 
             app.UseCors("MyPolicy");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -9,5 +9,6 @@ namespace LibraryManager.Domain.Abstractions.Services
     {
         Task<IEnumerable<Teacher>> GetAll();
         Task<bool> Create(CreateTeacherDto teacher);
+        Task<Teacher> GetByEmailAndPassword(string email, string password);
     }
 }

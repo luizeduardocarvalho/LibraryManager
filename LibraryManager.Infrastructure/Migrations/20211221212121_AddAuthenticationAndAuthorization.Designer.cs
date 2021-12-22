@@ -3,15 +3,17 @@ using System;
 using LibraryManager.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LibraryManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryManagerDbContext))]
-    partial class LibraryManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211221212121_AddAuthenticationAndAuthorization")]
+    partial class AddAuthenticationAndAuthorization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

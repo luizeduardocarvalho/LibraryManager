@@ -35,5 +35,12 @@ namespace LibraryManager.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<Teacher> GetByEmailAndPassword(string email, string password)
+        {
+            var teacher = await this.repository.GetByEmailAndPassword(email, password);
+
+            return teacher;
+        }
     }
 }

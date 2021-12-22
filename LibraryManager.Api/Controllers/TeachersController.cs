@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,10 +35,8 @@ namespace LibraryManager.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTeacherDto teacher)
         {
-            if(teacher == null)
-            {
+            if(!ModelState.IsValid)
                 return BadRequest();
-            }
 
             try
             {
