@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.AspNetCore.Authorization;
@@ -23,15 +24,15 @@ namespace LibraryManager.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] User model)
+        public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
-            var user = await this.repository.GetByEmailAndPassword(model.Email, model.Password);
+            var user = await this.repository.GetByEmailAndPassword(loginDto.Email, loginDto.Password);
 
             if(user == null)
                 return NotFound("Email or password are invalid.");
 
             var token = this.tokenService.GenerateToken(user);
-
+            
             user.Password = "";
 
             return new
