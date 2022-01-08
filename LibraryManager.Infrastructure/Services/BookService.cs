@@ -1,7 +1,9 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
+using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,11 +11,15 @@ namespace LibraryManager.Infrastructure.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository repository;
+        private readonly IBookRepository bookRepository;
+        private readonly ITransactionRepository transactionRepository;
 
-        public BookService(IBookRepository repository)
+        public BookService(
+            IBookRepository bookRepository,
+            ITransactionRepository transactionRepository)
         {
-            this.repository = repository;
+            this.bookRepository = bookRepository;
+            this.transactionRepository = transactionRepository;
         }
 
         public async Task<bool> Create(CreateBookDto book)
@@ -25,16 +31,49 @@ namespace LibraryManager.Infrastructure.Services
                 Description = book.Description
             };
 
-            this.repository.Insert(newBook);
-            var result = await this.repository.Save();
-
-            return result;
+            this.bookRepository.Insert(newBook);
+            return await this.bookRepository.Save();
         }
 
         public async Task<IEnumerable<Book>> GetAll()
         {
-            var books = await this.repository.GetAll();
+            var books = await this.bookRepository.GetAll();
             return books;
+        }
+
+        public async Task<bool> LendBook(LendBookDto lendBookDto)
+        {
+            var activeTransactionsForBook = this.transactionRepository.GetActiveByBook(lendBookDto.BookId);
+
+            if (activeTransactionsForBook == null)
+            {
+                var transaction = new Transaction
+                {
+                    BookId = lendBookDto.BookId,
+                    StudentId = lendBookDto.StudentId,
+                    CheckoutDate = DateTimeOffset.Now,
+                    ReturnDate = DateTimeOffset.Now.AddDays(7)
+                };
+
+                this.transactionRepository.Insert(transaction);
+                return await this.bookRepository.Save();
+            }
+
+            return false;
+        }
+
+        public async Task<bool> ReturnBook(ReturnBookDto returnBookDto)
+        {
+            var transaction = this.transactionRepository.GetActiveByBook(returnBookDto.BookId);
+
+            if (transaction != null)
+            {
+                transaction.Active = false;
+                transaction.ReturnedAt = DateTimeOffset.Now;
+                return await this.transactionRepository.Save();
+            }
+
+            return false;
         }
     }
 }

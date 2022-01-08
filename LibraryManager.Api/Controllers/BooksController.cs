@@ -1,6 +1,11 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace LibraryManager.Api.Controllers
@@ -10,16 +15,29 @@ namespace LibraryManager.Api.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService service;
+        private readonly IDistributedCache cache;
 
-        public BooksController(IBookService service)
+        public BooksController(IBookService service, IDistributedCache cache)
         {
             this.service = service;
+            this.cache = cache;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var books = await this.service.GetAll();
+            var cachedBooks = cache.GetString("Books");
+            IEnumerable<Book> books;
+
+            if(cachedBooks == null)
+            {
+                books = await this.service.GetAll();
+                cache.SetString("Books", JsonSerializer.Serialize(books));
+            }
+            else
+            {
+                books = JsonSerializer.Deserialize<IEnumerable<Book>>(cachedBooks);
+            }
 
             if (!books.Any())
             {
@@ -27,6 +45,42 @@ namespace LibraryManager.Api.Controllers
             }
 
             return Ok(books);
+        }
+
+        [HttpPost("Lend")]
+        public async Task<IActionResult> LendBook([FromBody] LendBookDto lendBookDto)
+        {
+            if(lendBookDto == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.service.LendBook(lendBookDto);
+
+            if(result)
+            {
+                return Ok($"The book {lendBookDto.BookId} was lent to student {lendBookDto.StudentId}");
+            }
+
+            return BadRequest("This book is not available");
+        }
+
+        [HttpPost("Return")]
+        public async Task<IActionResult> ReturnBook([FromBody] ReturnBookDto returnBookDto)
+        {
+            if(returnBookDto == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.service.ReturnBook(returnBookDto);
+
+            if(result)
+            {
+                return Ok($"The book {returnBookDto.BookId} was returned.");
+            }
+
+            return BadRequest();
         }
     }
 }

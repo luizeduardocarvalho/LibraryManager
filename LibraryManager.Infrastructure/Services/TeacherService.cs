@@ -27,7 +27,9 @@ namespace LibraryManager.Infrastructure.Services
             var newTeacher = new Teacher
             {
                 Name = teacher.Name,
-                Email = teacher.Email
+                Email = teacher.Email,
+                Password = teacher.Password,
+                Role = teacher.Role
             };
 
             this.repository.Insert(newTeacher);

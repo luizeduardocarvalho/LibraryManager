@@ -7,5 +7,6 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
     public interface ITransactionRepository : IBaseRepository<Transaction>
     {
         Task<IEnumerable<Transaction>> GetAllByBook(long bookId);
+        Transaction GetActiveByBook(long bookId);
     }
 }

@@ -4,7 +4,7 @@
 
     public sealed class Transaction : BaseEntity
     {
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
 
         public Book Book { get; set; }
 
@@ -16,7 +16,7 @@
 
         public long StudentId { get; set; }
 
-        public DateTimeOffset ReturnedAt { get; set; }
+        public DateTimeOffset? ReturnedAt { get; set; }
 
         public DateTimeOffset ReturnDate { get; set; }
     }

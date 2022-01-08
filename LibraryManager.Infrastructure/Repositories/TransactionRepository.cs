@@ -31,6 +31,11 @@ namespace LibraryManager.Infrastructure.Repositories
             return entity;
         }
 
+        public Transaction GetActiveByBook(long bookId)
+        {
+            return  this.table.FirstOrDefault(x => x.Active);
+        }
+
         private IIncludableQueryable<Transaction, Student> GetAllWithBookAndStudent()
         {
             var query = this.table.Include(x => x.Book).Include(x => x.Student);

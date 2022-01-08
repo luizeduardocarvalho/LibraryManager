@@ -108,6 +108,13 @@ namespace LibraryManager.Api
                     };
                 });
 
+            //services.AddDistributedRedisCache(options =>
+            //{
+            //    options.Configuration =
+            //        Configuration.GetConnectionString("LibraryManagerRedis");
+            //    options.InstanceName = "LibraryManagerRedis";
+            //});
+
             // Repositories
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ITransactionRepository, TransactionRepository>();
