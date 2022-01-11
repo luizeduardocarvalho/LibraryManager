@@ -1,6 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos.Students;
-using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace LibraryManager.Api.Controllers
         {
             var students = await this.service.GetAll();
 
-            if(!students.Any())
+            if (!students.Any())
             {
                 return NotFound("No students have been found.");
             }
@@ -34,19 +33,32 @@ namespace LibraryManager.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStudentDto createStudentDto)
         {
-            if(createStudentDto == null)
+            if (createStudentDto == null)
             {
                 return BadRequest();
             }
 
             var result = await this.service.Create(createStudentDto);
 
-            if(result)
+            if (result)
             {
                 return Ok("Student created");
             }
 
             return StatusCode(500, "Unexpected error");
+        }
+
+        [HttpGet("StudentsWithBooks")]
+        public async Task<IActionResult> GetStudentsWithBookCountByTeacher([FromQuery] GetStudentByTeacherDto getStudentByTeacherDto)
+        {
+            if (getStudentByTeacherDto == null)
+            {
+                return BadRequest();
+            }
+
+            var students = await this.service.GetStudentsWithBooksByTeacher(getStudentByTeacherDto.TeacherId);
+
+            return Ok(students);
         }
     }
 }

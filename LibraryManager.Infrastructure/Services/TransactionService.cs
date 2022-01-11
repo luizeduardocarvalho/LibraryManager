@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System.Collections.Generic;
@@ -15,26 +16,26 @@ namespace LibraryManager.Infrastructure.Services
             this.repository = repository;
         }
 
-        async Task<IEnumerable<Transaction>> ITransactionService.GetAll()
+        public async Task<IEnumerable<Transaction>> GetAll()
         {
-            var transactions = await this.repository.GetAll();
-            return transactions;
+            return await this.repository.GetAll();
         }
 
-        async Task<IEnumerable<Transaction>> ITransactionService.GetAllByBook(long bookId)
+        public async Task<IEnumerable<Transaction>> GetAllActiveTransactions()
+        {
+            return await this.repository.GetAllActiveTransactions();
+        }
+
+
+        public async Task<IEnumerable<Transaction>> GetAllByBook(long bookId)
         {
             var transactions = await this.repository.GetAllByBook(bookId);
             return transactions;
         }
 
-        bool ITransactionService.RentBook(long bookId, long studentId)
+        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName()
         {
-            throw new System.NotImplementedException();
-        }
-
-        bool ITransactionService.ReturnBook()
-        {
-            throw new System.NotImplementedException();
+            return await this.repository.GetLateBooksWithStudentName();
         }
     }
 }

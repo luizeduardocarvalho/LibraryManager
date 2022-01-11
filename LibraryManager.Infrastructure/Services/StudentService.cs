@@ -35,5 +35,10 @@ namespace LibraryManager.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId)
+        {
+            return await this.repository.GetStudentsWithBooksByTeacher(teacherId);
+        }
     }
 }

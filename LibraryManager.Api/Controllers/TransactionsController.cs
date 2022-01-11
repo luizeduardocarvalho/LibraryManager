@@ -29,6 +29,14 @@
             return Ok(transactions);
         }
 
+        [HttpGet("GetAllActive")]
+        public async Task<IActionResult> GetAllActiveTransactions()
+        {
+            var transactions = await this.service.GetAllActiveTransactions();
+
+            return Ok(transactions);
+        }
+
         [HttpGet("GetAllByBook")]
         public async Task<IActionResult> GetAllByBook([FromQuery] long bookId)
         {
@@ -40,6 +48,14 @@
             }
 
             return Ok(transactions);
+        }
+
+        [HttpGet("GetLateBooks")]
+        public async Task<IActionResult> GetLateBooksWithStudentName()
+        {
+            var lateBooks = await this.service.GetLateBooksWithStudentName();
+
+            return Ok(lateBooks);
         }
     }
 }

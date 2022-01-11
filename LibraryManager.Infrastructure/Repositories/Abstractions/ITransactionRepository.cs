@@ -1,4 +1,5 @@
-﻿using LibraryManager.Domain.Entities;
+﻿using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,5 +9,7 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
     {
         Task<IEnumerable<Transaction>> GetAllByBook(long bookId);
         Transaction GetActiveByBook(long bookId);
+        Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName();
+        Task<IEnumerable<Transaction>> GetAllActiveTransactions();
     }
 }

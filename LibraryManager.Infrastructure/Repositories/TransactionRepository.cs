@@ -1,7 +1,9 @@
-﻿using LibraryManager.Domain.Entities;
+﻿using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,13 +35,36 @@ namespace LibraryManager.Infrastructure.Repositories
 
         public Transaction GetActiveByBook(long bookId)
         {
-            return  this.table.FirstOrDefault(x => x.Active);
+            return  this.table.FirstOrDefault(x => x.Active && x.BookId == bookId);
         }
 
         private IIncludableQueryable<Transaction, Student> GetAllWithBookAndStudent()
         {
             var query = this.table.Include(x => x.Book).Include(x => x.Student);
             return query;
+        }
+
+        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName()
+        {
+            var lateBooks = await this.context.Transactions
+                .Include(x => x.Book)
+                .Include(x => x.Student)
+                .Where(x => x.ReturnedAt == null && DateTime.Now >=  x.ReturnDate)
+                .Select(x => 
+                    new LateBookWithStudentNameDto
+                    {
+                        BookId = x.Book.Id,
+                        BookTitle = x.Book.Title,
+                        StudentName = x.Student.Name
+                    })
+                .ToListAsync();
+
+            return lateBooks;
+        }
+
+        public async Task<IEnumerable<Transaction>> GetAllActiveTransactions()
+        {
+            return await this.context.Transactions.Where(x => x.Active).ToListAsync();
         }
     }
 }
