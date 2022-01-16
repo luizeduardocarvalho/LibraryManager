@@ -75,5 +75,10 @@ namespace LibraryManager.Infrastructure.Services
 
             return false;
         }
+
+        public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
+        {
+            return await this.bookRepository.GetBooksByTitle(title);
+        }   
     }
 }

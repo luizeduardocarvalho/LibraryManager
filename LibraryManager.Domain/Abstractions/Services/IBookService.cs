@@ -12,5 +12,6 @@ namespace LibraryManager.Domain.Abstractions.Services
         Task<bool> Create(CreateBookDto book);
         Task<bool> LendBook(LendBookDto lendBook);
         Task<bool> ReturnBook(ReturnBookDto returnBookDto);
+        Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title);
     }
 }

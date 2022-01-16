@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,32 @@ namespace LibraryManager.Api.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] CreateBookDto createBookDto)
+        {
+            if (createBookDto == null)
+            {
+                return BadRequest();
+            }
+
+            var newBook = await this.service.Create(createBookDto);
+
+            return Ok(newBook);
+        }
+
+        [HttpGet("GetBooksByTitle")]
+        public async Task<IActionResult> GetBooksByTitle([FromQuery] string title)
+        {
+            if (title == null)
+            {
+                return BadRequest();
+            }
+
+            var books = await this.service.GetBooksByTitle(title);
+
+            return Ok(books);
         }
     }
 }

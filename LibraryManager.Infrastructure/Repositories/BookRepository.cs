@@ -1,13 +1,38 @@
-﻿using LibraryManager.Domain.Entities;
+﻿using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Infrastructure.Repositories
 {
     public class BookRepository : BaseRepository<Book>, IBookRepository
     {
+        private readonly LibraryManagerDbContext context;
+
         public BookRepository(LibraryManagerDbContext context) 
             : base(context)
         {
+            this.context = context;
+        }
+
+        public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
+        {
+            return await this.context.Books
+                                        .Include(x => x.Author)
+                                        .Where(x => x.Title.Contains(title))
+                                        .Select(x => 
+                                            new GetBooksDto
+                                            {
+                                                AuthorName = x.Author.Name,
+                                                BookId = x.Id,
+                                                Description = x.Description,
+                                                Title = x.Title
+                                            })
+                                        .ToListAsync();
         }
     }
 }
