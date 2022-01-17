@@ -60,10 +60,10 @@ namespace LibraryManager.Api.Controllers
 
             if(result)
             {
-                return Ok($"The book {lendBookDto.BookId} was lent to student {lendBookDto.StudentId}");
+                return Ok();
             }
 
-            return BadRequest("This book is not available");
+            return BadRequest();
         }
 
         [HttpPost("Return")]
@@ -74,11 +74,29 @@ namespace LibraryManager.Api.Controllers
                 return BadRequest();
             }
 
-            var result = await this.service.ReturnBook(returnBookDto);
+            var result = await this.service.ReturnBook(returnBookDto.BookId);
 
-            if(result)
+            if(result != null)
             {
-                return Ok($"The book {returnBookDto.BookId} was returned.");
+                return Ok(result);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPatch("Renew")]
+        public async Task<IActionResult> RenewBook([FromBody] ReturnBookDto returnBookDto)
+        {
+            if (returnBookDto == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.service.RenewBook(returnBookDto.BookId);
+
+            if (result != null)
+            {
+                return Ok(result);
             }
 
             return BadRequest();
@@ -108,6 +126,19 @@ namespace LibraryManager.Api.Controllers
             var books = await this.service.GetBooksByTitle(title);
 
             return Ok(books);
+        }
+
+        [HttpGet("GetBookById")]
+        public async Task<IActionResult> GetBookById([FromQuery] long bookId)
+        {
+            if(bookId == 0)
+            {
+                return BadRequest();
+            }
+
+            var book = await this.service.GetBookById(bookId);
+
+            return Ok(book);
         }
     }
 }

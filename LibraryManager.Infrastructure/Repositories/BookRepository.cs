@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,30 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 Title = x.Title
                                             })
                                         .ToListAsync();
+        }
+
+        public async Task<GetBookDto> GetBookById(long bookId)
+        {
+            return await this.context.Books
+                                        .Include(x => x.Transactions)
+                                        .ThenInclude(x => x.Student)
+                                        .Where(x => x.Id == bookId)
+                                        .Select(x =>
+                                            new GetBookDto
+                                            {
+                                                BookId = x.Id,
+                                                Description = x.Description,
+                                                Title = x.Title,
+                                                Transactions = x.Transactions.Select(x =>
+                                                    new GetTransactionDto
+                                                    {
+                                                        StudentName = x.Student.Name,
+                                                        CreationDate = x.CreateDate,
+                                                        ReturnedAt = x.ReturnedAt,
+                                                        ReturnDate = x.ReturnDate,
+                                                        TransactionId = x.Id
+                                                    }).OrderByDescending(x => x.TransactionId).ToList()
+                                            }).FirstOrDefaultAsync();
         }
     }
 }

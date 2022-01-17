@@ -33,5 +33,20 @@ namespace LibraryManager.Infrastructure.Repositories
 
             return students;
         }
+
+        public async Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name)
+        {
+            var students = await this.context.Students
+                                                .Where(x => x.Name.Contains(name))
+                                                .Select(x =>
+                                                    new GetStudentsDto
+                                                    {
+                                                        StudentId = x.Id,
+                                                        Name = x.Name
+                                                    })
+                                                .ToListAsync();
+
+            return students;
+        }
     }
 }

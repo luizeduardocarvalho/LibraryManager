@@ -35,7 +35,7 @@ namespace LibraryManager.Infrastructure.Repositories
 
         public Transaction GetActiveByBook(long bookId)
         {
-            return  this.table.FirstOrDefault(x => x.Active && x.BookId == bookId);
+            return  this.table.Include(x => x.Student).FirstOrDefault(x => x.Active && x.BookId == bookId);
         }
 
         private IIncludableQueryable<Transaction, Student> GetAllWithBookAndStudent()

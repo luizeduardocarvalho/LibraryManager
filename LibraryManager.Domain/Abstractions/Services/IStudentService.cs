@@ -10,5 +10,6 @@ namespace LibraryManager.Domain.Abstractions.Services
         Task<IEnumerable<Student>> GetAll();
         Task<bool> Create(CreateStudentDto student);
         Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId);
+        Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name);
     }
 }

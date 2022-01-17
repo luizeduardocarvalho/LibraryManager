@@ -1,6 +1,7 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System;
@@ -62,23 +63,62 @@ namespace LibraryManager.Infrastructure.Services
             return false;
         }
 
-        public async Task<bool> ReturnBook(ReturnBookDto returnBookDto)
+        public async Task<GetTransactionDto> ReturnBook(long bookId)
         {
-            var transaction = this.transactionRepository.GetActiveByBook(returnBookDto.BookId);
+            var transaction = this.transactionRepository.GetActiveByBook(bookId);
+            GetTransactionDto transactionDto = new() { };
 
             if (transaction != null)
             {
                 transaction.Active = false;
                 transaction.ReturnedAt = DateTimeOffset.Now;
-                return await this.transactionRepository.Save();
+                await this.transactionRepository.Save();
+
+                transactionDto = new()
+                {
+                    ReturnedAt = transaction.ReturnedAt,
+                    CreationDate = transaction.CreateDate,
+                    StudentName = transaction.Student.Name,
+                    TransactionId = transaction.Id,
+                    ReturnDate = transaction.ReturnDate
+                };
             }
 
-            return false;
+            return transactionDto;
         }
+
+        public async Task<GetTransactionDto> RenewBook(long bookId)
+        {
+            var transaction = this.transactionRepository.GetActiveByBook(bookId);
+            GetTransactionDto transactionDto = new() { };
+
+            if (transaction != null)
+            {
+                transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
+                await this.transactionRepository.Save();
+
+                transactionDto = new()
+                {
+                    ReturnedAt = transaction.ReturnedAt,
+                    CreationDate = transaction.CreateDate,
+                    StudentName = transaction.Student.Name,
+                    TransactionId = transaction.Id,
+                    ReturnDate = transaction.ReturnDate
+                };
+            }
+
+            return transactionDto;
+        }
+
 
         public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
         {
             return await this.bookRepository.GetBooksByTitle(title);
-        }   
+        }
+
+        public async Task<GetBookDto> GetBookById(long bookId)
+        {
+            return await this.bookRepository.GetBookById(bookId);
+        }
     }
 }
