@@ -57,5 +57,18 @@
 
             return Ok(lateBooks);
         }
+
+        [HttpGet("GetTransactionsWithDetailsByStudent")]
+        public async Task<IActionResult> GetTransactionsWithDetailsByStudent([FromQuery] long studentId)
+        {
+            if(studentId == 0)
+            {
+                return BadRequest();
+            }
+
+            var transactions = await this.service.GetTransactionsWithDetailsByStudent(studentId);
+
+            return Ok(transactions);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,26 @@ namespace LibraryManager.Infrastructure.Repositories
         public async Task<IEnumerable<Transaction>> GetAllActiveTransactions()
         {
             return await this.context.Transactions.Where(x => x.Active).ToListAsync();
+        }
+
+        public async Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId)
+        {
+            return await this.context.Transactions
+                                        .Include(x => x.Book)
+                                        .Include(x => x.Student)
+                                        .Where(x => x.Student.Id == studentId)
+                                        .Select(x =>
+                                            new GetTransactionDto
+                                            {
+                                                StudentName = x.Student.Name,
+                                                ReturnedAt = x.ReturnedAt,
+                                                BookTitle = x.Book.Title,
+                                                CreationDate = x.CreateDate,
+                                                ReturnDate = x.ReturnDate,
+                                                TransactionId = x.Id,
+                                                BookId = x.Book.Id
+                                            })
+                                        .ToListAsync();
         }
     }
 }

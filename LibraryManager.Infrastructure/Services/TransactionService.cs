@@ -1,5 +1,6 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos.Books;
+using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System.Collections.Generic;
@@ -36,6 +37,11 @@ namespace LibraryManager.Infrastructure.Services
         public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName()
         {
             return await this.repository.GetLateBooksWithStudentName();
+        }
+
+        public async Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId)
+        {
+            return await this.repository.GetTransactionsWithDetailsByStudent(studentId);
         }
     }
 }
