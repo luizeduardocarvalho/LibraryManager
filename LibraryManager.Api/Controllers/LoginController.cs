@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LibraryManager.Api.Controllers
 {
     [ApiController]
-    [Route("v1")]
+    [Route("[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly ITeacherRepository repository;
