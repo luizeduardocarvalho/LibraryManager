@@ -1,10 +1,12 @@
-﻿using LibraryManager.Domain.Abstractions.Services;
+﻿using LibraryManager.Api.Configurations;
+using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -18,11 +20,13 @@ namespace LibraryManager.Api.Controllers
     {
         private readonly IBookService service;
         private readonly IDistributedCache cache;
+        private readonly IOptions<Settings> settings;
 
-        public BooksController(IBookService service, IDistributedCache cache)
+        public BooksController(IBookService service, IDistributedCache cache, IOptions<Settings> settings)
         {
             this.service = service;
             this.cache = cache;
+            this.settings = settings;
         }
 
         [AllowAnonymous]
@@ -48,6 +52,13 @@ namespace LibraryManager.Api.Controllers
             }
 
             return Ok(books);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("test")]
+        public async Task<IActionResult> test()
+        {
+            return Ok(this.settings.Value);
         }
 
         [HttpPost("Lend")]
