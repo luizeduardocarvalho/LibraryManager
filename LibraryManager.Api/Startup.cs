@@ -82,7 +82,7 @@ namespace LibraryManager.Api
             services.AddCors();
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
-
+            Console.WriteLine(Configuration.GetSection("Settings").Value);
             services
                 .AddAuthentication(x =>
                 {
