@@ -83,25 +83,25 @@ namespace LibraryManager.Api
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
-            services
-                .AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(Configuration.GetSection("Settings").GetSection("Secret").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+            //services
+            //    .AddAuthentication(x =>
+            //    {
+            //        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    })
+            //    .AddJwtBearer(x =>
+            //    {
+            //        x.RequireHttpsMetadata = false;
+            //        x.SaveToken = true;
+            //        x.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(
+            //                Encoding.ASCII.GetBytes(Configuration.GetSection("Settings").GetSection("Secret").Value)),
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false
+            //        };
+            //    });
 
             //services.AddDistributedRedisCache(options =>
             //{

@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace LibraryManager.Api.Controllers
             this.cache = cache;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
