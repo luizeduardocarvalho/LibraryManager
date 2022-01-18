@@ -79,16 +79,7 @@ namespace LibraryManager.Api
                         GetConnectionString(),
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllOrigins",
-                    builder =>
-                    {
-                        builder.AllowAnyHeader()
-                                       .AllowAnyOrigin()
-                                      .AllowAnyMethod();
-                    });
-            });
+            services.AddCors();
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
@@ -144,11 +135,13 @@ namespace LibraryManager.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
             }
 
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors("AllOrigins");
 
             app.UseAuthentication();
 
