@@ -79,12 +79,16 @@ namespace LibraryManager.Api
                         GetConnectionString(),
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            services.AddCors(options =>
             {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
+                options.AddPolicy("AllOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyHeader()
+                                       .AllowAnyOrigin()
+                                      .AllowAnyMethod();
+                    });
+            });
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
@@ -144,7 +148,7 @@ namespace LibraryManager.Api
 
             app.UseRouting();
 
-            app.UseCors("MyPolicy");
+            app.UseCors("AllOrigins");
 
             app.UseAuthentication();
 
