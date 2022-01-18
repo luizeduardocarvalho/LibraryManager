@@ -22,7 +22,7 @@ namespace LibraryManager.Api.Controllers
         private readonly IDistributedCache cache;
         private readonly IOptions<Settings> settings;
 
-        public BooksController(IBookService service, IDistributedCache cache, IOptions<Settings> settings)
+        public BooksController(IBookService service, IDistributedCache cache)
         {
             this.service = service;
             this.cache = cache;
@@ -52,13 +52,6 @@ namespace LibraryManager.Api.Controllers
             }
 
             return Ok(books);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
-        {
-            return Ok(this.settings.Value);
         }
 
         [HttpPost("Lend")]
