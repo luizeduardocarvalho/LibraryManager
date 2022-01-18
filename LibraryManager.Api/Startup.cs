@@ -82,7 +82,6 @@ namespace LibraryManager.Api
             services.AddCors();
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
-            Console.WriteLine(Configuration.GetSection("Settings").Value);
             services
                 .AddAuthentication(x =>
                 {
@@ -97,7 +96,7 @@ namespace LibraryManager.Api
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(Configuration.GetSection("Settings").Value)),
+                            Encoding.ASCII.GetBytes(Configuration.GetSection("Settings").GetSection("Secret").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
