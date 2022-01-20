@@ -17,6 +17,8 @@
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
+            builder.Property(x => x.LendDate)
+                .HasColumnName("CheckoutDate");
             builder.Property(x => x.IsRemoved)
                 .IsRequired()
                 .HasDefaultValue(false);

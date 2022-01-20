@@ -52,7 +52,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                     new GetTransactionDto
                                                     {
                                                         StudentName = x.Student.Name,
-                                                        CreationDate = x.CreateDate,
+                                                        CreationDate = x.LendDate,
                                                         ReturnedAt = x.ReturnedAt,
                                                         ReturnDate = x.ReturnDate,
                                                         TransactionId = x.Id

@@ -80,7 +80,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 StudentName = x.Student.Name,
                                                 ReturnedAt = x.ReturnedAt,
                                                 BookTitle = x.Book.Title,
-                                                CreationDate = x.CreateDate,
+                                                CreationDate = x.LendDate,
                                                 ReturnDate = x.ReturnDate,
                                                 TransactionId = x.Id,
                                                 BookId = x.Book.Id

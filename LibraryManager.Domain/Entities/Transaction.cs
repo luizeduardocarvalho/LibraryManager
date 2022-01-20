@@ -10,7 +10,7 @@
 
         public long BookId { get; set; }
 
-        public DateTimeOffset CheckoutDate { get; set; }
+        public DateTimeOffset LendDate { get; set; }
 
         public Student Student { get; set; }
 

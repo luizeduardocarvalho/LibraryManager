@@ -52,7 +52,7 @@ namespace LibraryManager.Infrastructure.Services
                 {
                     BookId = lendBookDto.BookId,
                     StudentId = lendBookDto.StudentId,
-                    CheckoutDate = DateTimeOffset.Now,
+                    LendDate = DateTimeOffset.Now,
                     ReturnDate = DateTimeOffset.Now.AddDays(7)
                 };
 
