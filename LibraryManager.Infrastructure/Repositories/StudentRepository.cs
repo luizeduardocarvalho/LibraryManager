@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace LibraryManager.Infrastructure.Repositories
         public async Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name)
         {
             var students = await this.context.Students
-                                                .Where(x => x.Name.Contains(name))
+                                                .Where(x => x.Name.ToLower().Contains(name.ToLower()))
                                                 .Select(x =>
                                                     new GetStudentsDto
                                                     {
