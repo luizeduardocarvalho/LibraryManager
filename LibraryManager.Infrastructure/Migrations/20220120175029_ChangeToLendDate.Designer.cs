@@ -3,15 +3,17 @@ using System;
 using LibraryManager.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LibraryManager.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryManagerDbContext))]
-    partial class LibraryManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220120175029_ChangeToLendDate")]
+    partial class ChangeToLendDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 52, 42, 99, DateTimeKind.Unspecified).AddTicks(8097), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 50, 28, 936, DateTimeKind.Unspecified).AddTicks(9026), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<bool>("IsRemoved")
                         .ValueGeneratedOnAdd()
@@ -61,7 +63,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 52, 42, 111, DateTimeKind.Unspecified).AddTicks(1834), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 50, 28, 957, DateTimeKind.Unspecified).AddTicks(198), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -98,7 +100,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 52, 42, 113, DateTimeKind.Unspecified).AddTicks(3400), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 50, 28, 961, DateTimeKind.Unspecified).AddTicks(3062), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -137,7 +139,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 52, 42, 114, DateTimeKind.Unspecified).AddTicks(5959), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 50, 28, 963, DateTimeKind.Unspecified).AddTicks(5302), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -181,7 +183,7 @@ namespace LibraryManager.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 52, 42, 115, DateTimeKind.Unspecified).AddTicks(7249), new TimeSpan(0, 0, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2022, 1, 20, 17, 50, 28, 965, DateTimeKind.Unspecified).AddTicks(6864), new TimeSpan(0, 0, 0, 0, 0)));
 
                     b.Property<bool>("IsRemoved")
                         .ValueGeneratedOnAdd()
@@ -189,7 +191,8 @@ namespace LibraryManager.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset>("LendDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CheckoutDate");
 
                     b.Property<DateTimeOffset>("ReturnDate")
                         .HasColumnType("timestamp with time zone");

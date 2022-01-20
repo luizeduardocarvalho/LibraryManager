@@ -3,6 +3,7 @@ using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,8 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 AuthorName = x.Author.Name,
                                                 BookId = x.Id,
                                                 Description = x.Description,
-                                                Title = x.Title
+                                                Title = x.Title,
+                                                Status = x.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null
                                             })
                                         .ToListAsync();
         }
