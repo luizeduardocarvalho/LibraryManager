@@ -53,7 +53,7 @@ namespace LibraryManager.Infrastructure.Services
                     BookId = lendBookDto.BookId,
                     StudentId = lendBookDto.StudentId,
                     LendDate = DateTimeOffset.Now,
-                    ReturnDate = DateTimeOffset.Now.AddDays(7)
+                    ReturnDate = DateTimeOffset.Now.AddDays(14)
                 };
 
                 this.transactionRepository.Insert(transaction);
