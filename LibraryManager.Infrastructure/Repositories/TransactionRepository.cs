@@ -84,7 +84,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 ReturnDate = x.ReturnDate,
                                                 TransactionId = x.Id,
                                                 BookId = x.Book.Id
-                                            })
+                                            }).OrderByDescending(x => x.CreationDate)
                                         .ToListAsync();
         }
     }

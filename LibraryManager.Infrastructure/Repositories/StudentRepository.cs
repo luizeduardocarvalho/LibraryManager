@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Dtos.Students;
+using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,29 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 .ToListAsync();
 
             return students;
+        }
+
+        public async Task<GetStudentWithTransactionsDto> GetStudentWithTransactionsById(long studentId)
+        {
+            return await this.context.Students
+                                            .Where(x => x.Id == studentId)
+                                            .Select(x =>
+                                                new GetStudentWithTransactionsDto
+                                                {
+                                                    StudentId = x.Id,
+                                                    StudentName = x.Name,
+                                                    Transactions = x.Transactions.Select(x =>
+                                                        new GetTransactionDto {
+                                                            ReturnedAt = x.ReturnedAt,
+                                                            BookId = x.BookId,
+                                                            BookTitle = x.Book.Title,
+                                                            CreationDate = x.LendDate,
+                                                            ReturnDate = x.ReturnDate,
+                                                            TransactionId = x.Id,
+                                                            IsLate = (DateTimeOffset.Now >= x.ReturnDate && x.ReturnedAt == null)
+                                                        }).OrderByDescending(x => x.CreationDate).ToList()
+                                                })
+                                            .FirstOrDefaultAsync();
         }
     }
 }

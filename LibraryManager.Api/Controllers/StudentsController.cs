@@ -73,5 +73,18 @@ namespace LibraryManager.Api.Controllers
 
             return Ok(students);
         }
+
+        [HttpGet("GetStudentWithTransactionsById")]
+        public async Task<IActionResult> GetStudentWithTransactionsById([FromQuery] long studentId)
+        {
+            if(studentId == 0)
+            {
+                return BadRequest();
+            }
+
+            var student = await this.service.GetStudentWithTransactionsById(studentId);
+
+            return Ok(student);
+        }
     }
 }
