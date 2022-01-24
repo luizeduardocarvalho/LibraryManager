@@ -115,12 +115,14 @@ namespace LibraryManager.Api
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IStudentRepository, StudentRepository>();
             services.AddTransient<ITeacherRepository, TeacherRepository>();
+            services.AddTransient<IAuthorRepository, AuthorRepository>();
 
             // Services
             services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<ITeacherService, TeacherService>();
+            services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<ITokenService, TokenService>();
 
         }
