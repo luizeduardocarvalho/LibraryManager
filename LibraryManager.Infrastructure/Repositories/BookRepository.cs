@@ -33,7 +33,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 BookId = x.Id,
                                                 Description = x.Description,
                                                 Title = x.Title,
-                                                Status = x.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null
+                                                Status = (x.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null || !x.Transactions.Any())
                                             })
                                         .ToListAsync();
         }
