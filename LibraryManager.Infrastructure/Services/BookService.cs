@@ -120,5 +120,21 @@ namespace LibraryManager.Infrastructure.Services
         {
             return await this.bookRepository.GetBookById(bookId);
         }
+
+        public async Task<bool> UpdateBook(UpdateBookDto updateBook)
+        {
+            var book = await this.bookRepository.GetById(updateBook.Id);
+            if(!string.IsNullOrEmpty(updateBook.Title))
+            {
+                book.Title = updateBook.Title;
+            }
+
+            if (!string.IsNullOrEmpty(updateBook.Description))
+            {
+                book.Description = updateBook.Description;
+            }
+
+            return await this.bookRepository.Save();
+        }
     }
 }

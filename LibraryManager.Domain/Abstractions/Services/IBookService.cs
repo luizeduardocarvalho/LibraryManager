@@ -16,5 +16,6 @@ namespace LibraryManager.Domain.Abstractions.Services
         Task<GetTransactionDto> RenewBook(long bookId);
         Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title);
         Task<GetBookDto> GetBookById(long bookId);
+        Task<bool> UpdateBook(UpdateBookDto updateBook);
     }
 }

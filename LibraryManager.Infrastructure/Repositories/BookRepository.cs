@@ -61,5 +61,10 @@ namespace LibraryManager.Infrastructure.Repositories
                                                     }).OrderByDescending(x => x.TransactionId).ToList()
                                             }).FirstOrDefaultAsync();
         }
+
+        public async Task<Book> GetById(long bookId)
+        {
+            return await this.context.Books.FirstOrDefaultAsync(x => x.Id == bookId);
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace LibraryManager.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var cachedBooks = cache.GetString("Books");
@@ -121,7 +121,7 @@ namespace LibraryManager.Api.Controllers
             return Ok(newBook);
         }
 
-        [HttpGet("GetBooksByTitle")]
+        [HttpGet]
         public async Task<IActionResult> GetBooksByTitle([FromQuery] string title)
         {
             if (title == null)
@@ -145,6 +145,19 @@ namespace LibraryManager.Api.Controllers
             var book = await this.service.GetBookById(bookId);
 
             return Ok(book);
+        }
+
+        [HttpPatch("UpdateBook")]
+        public async Task<IActionResult> UpdateBook([FromBody] UpdateBookDto updateBook)
+        {
+            if(updateBook is null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.service.UpdateBook(updateBook);
+
+            return Ok(result);
         }
     }
 }

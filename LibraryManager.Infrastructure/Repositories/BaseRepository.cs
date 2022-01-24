@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LibraryManager.Infrastructure.Repositories
@@ -48,7 +47,7 @@ namespace LibraryManager.Infrastructure.Repositories
         {
             var result = await this.context.SaveChangesAsync();
 
-            if(result > 0)
+            if (result > 0)
             {
                 return true;
             }
