@@ -33,5 +33,10 @@ namespace LibraryManager.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)
+        {
+            return await this.repository.GetAuthorWithBooksById(authorId);
+        }
     }
 }

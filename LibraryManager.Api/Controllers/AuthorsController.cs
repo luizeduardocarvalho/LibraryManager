@@ -46,5 +46,18 @@ namespace LibraryManager.Api.Controllers
 
             return StatusCode(500, "Unexpected error");
         }
+
+        [HttpGet("GetAuthorWithBooksById")]
+        public async Task<IActionResult> GetAuthorsWithBookById([FromQuery] long authorId)
+        {
+            if(authorId == 0)
+            {
+                return BadRequest();
+            }
+
+            var author = await this.service.GetAuthorWithBooksById(authorId);
+
+            return Ok(author);
+        }
     }
 }
