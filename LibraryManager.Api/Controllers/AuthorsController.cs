@@ -41,7 +41,7 @@ namespace LibraryManager.Api.Controllers
 
             if(result)
             {
-                return Ok("Author was creted");
+                return Ok("Author was created");
             }
 
             return StatusCode(500, "Unexpected error");
