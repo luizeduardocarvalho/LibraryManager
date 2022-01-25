@@ -32,6 +32,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 AuthorName = x.Author.Name,
                                                 BookId = x.Id,
                                                 Description = x.Description,
+                                                Reference = x.Reference,
                                                 Title = x.Title,
                                                 Status = (x.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null || !x.Transactions.Any())
                                             })
