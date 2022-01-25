@@ -17,6 +17,7 @@
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
+            builder.Property(x => x.Reference);
             builder.Property(x => x.IsRemoved)
                 .IsRequired()
                 .HasDefaultValue(false);

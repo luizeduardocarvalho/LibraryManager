@@ -29,7 +29,8 @@ namespace LibraryManager.Infrastructure.Services
             {
                 AuthorId = book.AuthorId,
                 Title = book.Title,
-                Description = book.Description
+                Description = book.Description,
+                Reference = book.Reference
             };
 
             this.bookRepository.Insert(newBook);
