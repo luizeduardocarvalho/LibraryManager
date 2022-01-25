@@ -16,6 +16,11 @@ namespace LibraryManager.Infrastructure.Services
             this.repository = repository;
         }
 
+        public async Task<IEnumerable<Author>> GetAll()
+        {
+            return await this.repository.GetAll();
+        }
+
         public async Task<IEnumerable<GetAuthorDto>> GetAuthorsByName(string authorName)
         {
             return await this.repository.GetAuthorsByName(authorName);

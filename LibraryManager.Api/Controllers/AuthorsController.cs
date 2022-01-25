@@ -16,6 +16,14 @@ namespace LibraryManager.Api.Controllers
             this.service = service;
         }
 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var authors = await this.service.GetAll();
+
+            return Ok(authors);
+        }
+
         [HttpGet("GetAuthorsByName")]
         public async Task<IActionResult> GetAuthorsByName([FromQuery] string authorName)
         {
