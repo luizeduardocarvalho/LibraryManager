@@ -33,11 +33,6 @@ namespace LibraryManager.Infrastructure.Repositories
             return entity;
         }
 
-        T IBaseRepository<T>.GetById(object id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async void Insert(T obj)
         {
             await this.table.AddAsync(obj);

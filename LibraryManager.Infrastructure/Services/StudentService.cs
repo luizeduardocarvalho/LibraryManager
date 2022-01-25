@@ -50,5 +50,18 @@ namespace LibraryManager.Infrastructure.Services
         {
             return await this.repository.GetStudentWithTransactionsById(studentId);
         }
+
+        public async Task<bool> UpdateStudentTeacher(UpdateStudentTeacherDto updateStudentDto)
+        {
+            var student = await this.repository.GetById(updateStudentDto.StudentId);
+
+            if(student is not null)
+            {
+                student.TeacherId = updateStudentDto.TeacherId;
+                return await this.repository.Save();
+            }
+
+            return false;
+        }
     }
 }

@@ -73,5 +73,10 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 })
                                             .FirstOrDefaultAsync();
         }
+
+        public async Task<Student> GetById(long id)
+        {
+            return await this.context.Students.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

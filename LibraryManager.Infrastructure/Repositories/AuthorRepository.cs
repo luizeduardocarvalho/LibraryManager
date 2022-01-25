@@ -47,6 +47,7 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
                                                                     {
                                                                         BookId = b.Id,
                                                                         Description = b.Description,
+                                                                        Reference = b.Reference,
                                                                         Status = b.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null,
                                                                         Title = b.Title
                                                                     }).ToList()

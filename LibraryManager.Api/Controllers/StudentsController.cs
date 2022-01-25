@@ -86,5 +86,23 @@ namespace LibraryManager.Api.Controllers
 
             return Ok(student);
         }
+
+        [HttpPatch("UpdateStudentTeacher")]
+        public async Task<IActionResult> UpdateStudentTeacher([FromBody] UpdateStudentTeacherDto updateStudentDto)
+        {
+            if (updateStudentDto == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.service.UpdateStudentTeacher(updateStudentDto);
+
+            if(result)
+            {
+                return Ok("Ok");
+            }
+
+            return StatusCode(500, "Error");
+        }
     }
 }
