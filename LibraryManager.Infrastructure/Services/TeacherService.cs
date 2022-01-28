@@ -1,5 +1,6 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
+using LibraryManager.Domain.Dtos.Teacher;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
 using System.Collections.Generic;
@@ -43,6 +44,11 @@ namespace LibraryManager.Infrastructure.Services
             var teacher = await this.repository.GetByEmailAndPassword(email, password);
 
             return teacher;
+        }
+
+        public async Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents()
+        {
+            return await this.repository.GetTeachersWithStudents();
         }
     }
 }

@@ -48,5 +48,13 @@ namespace LibraryManager.Api.Controllers
                 return StatusCode(500, e);
             }
         }
+
+        [HttpGet("TeacherReport")]
+        public async Task<IActionResult> TeacherReport()
+        {
+            var report = await this.service.GetTeachersWithStudents();
+
+            return Ok(report);
+        }
     }
 }

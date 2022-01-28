@@ -124,6 +124,8 @@ namespace LibraryManager.Api
             services.AddTransient<ITeacherService, TeacherService>();
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IEncryptService, EncryptService>();
 
         }
 
