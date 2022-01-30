@@ -25,7 +25,7 @@ namespace LibraryManager.Infrastructure.Repositories
         {
             return await this.context.Books
                                         .Include(x => x.Author)
-                                        .Where(x => x.Title.ToLower().Contains(title.ToLower()) || x.Reference == Int32.Parse(title))
+                                        .Where(x => x.Title.ToLower().Contains(title.ToLower()) || x.Reference.ToString() == title)
                                         .Select(x => 
                                             new GetBooksDto
                                             {
