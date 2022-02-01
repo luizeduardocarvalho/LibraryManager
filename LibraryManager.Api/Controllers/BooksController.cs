@@ -116,9 +116,15 @@ namespace LibraryManager.Api.Controllers
                 return BadRequest();
             }
 
-            var newBook = await this.service.Create(createBookDto);
-
-            return Ok(newBook);
+            try
+            {
+                var result = await this.service.Create(createBookDto);
+                return Ok("Success");
+            }
+            catch
+            {
+                return StatusCode(500, "An error has occurred.");
+            }
         }
 
         [HttpGet]

@@ -33,8 +33,15 @@ namespace LibraryManager.Infrastructure.Services
                 Reference = book.Reference
             };
 
-            this.bookRepository.Insert(newBook);
-            return await this.bookRepository.Save();
+            try
+            {
+                this.bookRepository.Insert(newBook);
+                return await this.bookRepository.Save();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Book>> GetAll()
@@ -125,7 +132,7 @@ namespace LibraryManager.Infrastructure.Services
         public async Task<bool> UpdateBook(UpdateBookDto updateBook)
         {
             var book = await this.bookRepository.GetById(updateBook.Id);
-            if(!string.IsNullOrEmpty(updateBook.Title))
+            if (!string.IsNullOrEmpty(updateBook.Title))
             {
                 book.Title = updateBook.Title;
             }
