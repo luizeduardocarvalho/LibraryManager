@@ -64,8 +64,15 @@ namespace LibraryManager.Infrastructure.Services
                     ReturnDate = DateTimeOffset.Now.AddDays(14)
                 };
 
-                this.transactionRepository.Insert(transaction);
-                return await this.bookRepository.Save();
+                try
+                {
+                    this.transactionRepository.Insert(transaction);
+                    return await this.bookRepository.Save();
+                }
+                catch
+                {
+                    throw;
+                }
             }
 
             return false;

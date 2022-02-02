@@ -33,10 +33,15 @@ namespace LibraryManager.Infrastructure.Services
                 Name = author.Name
             };
 
-            this.repository.Insert(newAuthor);
-            var result = await this.repository.Save();
-
-            return result;
+            try
+            {
+                this.repository.Insert(newAuthor);
+                return await this.repository.Save();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)

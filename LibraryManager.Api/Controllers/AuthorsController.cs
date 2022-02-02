@@ -27,7 +27,7 @@ namespace LibraryManager.Api.Controllers
         [HttpGet("GetAuthorsByName")]
         public async Task<IActionResult> GetAuthorsByName([FromQuery] string authorName)
         {
-            if(authorName == null)
+            if (authorName == null)
             {
                 return BadRequest();
             }
@@ -40,25 +40,27 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] CreateAuthorDto author)
         {
-            if(author is null)
+            if (string.IsNullOrEmpty(author.Name))
             {
                 return BadRequest();
             }
 
-            var result = await this.service.Create(author);
-
-            if(result)
+            try
             {
+                var result = await this.service.Create(author);
                 return Ok("Author was created");
-            }
 
-            return StatusCode(500, "Unexpected error");
+            }
+            catch
+            {
+                return StatusCode(500, "Unexpected error");
+            }
         }
 
         [HttpGet("GetAuthorWithBooksById")]
         public async Task<IActionResult> GetAuthorsWithBookById([FromQuery] long authorId)
         {
-            if(authorId == 0)
+            if (authorId == 0)
             {
                 return BadRequest();
             }

@@ -36,7 +36,7 @@ namespace LibraryManager.Api.Controllers
             var cachedBooks = cache.GetString("Books");
             IEnumerable<Book> books;
 
-            if(cachedBooks == null)
+            if (cachedBooks == null)
             {
                 books = await this.service.GetAll();
                 cache.SetString("Books", JsonSerializer.Serialize(books));
@@ -57,32 +57,33 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("Lend")]
         public async Task<IActionResult> LendBook([FromBody] LendBookDto lendBookDto)
         {
-            if(lendBookDto == null)
+            if (lendBookDto == null)
             {
                 return BadRequest();
             }
 
-            var result = await this.service.LendBook(lendBookDto);
-
-            if(result)
+            try
             {
-                return Ok();
+                var result = await this.service.LendBook(lendBookDto);
+                return Ok("Success");
             }
-
-            return BadRequest();
+            catch
+            {
+                return StatusCode(500, "Something went wrong.");
+            }
         }
 
         [HttpPost("Return")]
         public async Task<IActionResult> ReturnBook([FromBody] ReturnBookDto returnBookDto)
         {
-            if(returnBookDto == null)
+            if (returnBookDto == null)
             {
                 return BadRequest();
             }
 
             var result = await this.service.ReturnBook(returnBookDto.BookId);
 
-            if(result != null)
+            if (result != null)
             {
                 return Ok(result);
             }
@@ -143,7 +144,7 @@ namespace LibraryManager.Api.Controllers
         [HttpGet("GetBookById")]
         public async Task<IActionResult> GetBookById([FromQuery] long bookId)
         {
-            if(bookId == 0)
+            if (bookId == 0)
             {
                 return BadRequest();
             }
@@ -156,7 +157,7 @@ namespace LibraryManager.Api.Controllers
         [HttpPatch("UpdateBook")]
         public async Task<IActionResult> UpdateBook([FromBody] UpdateBookDto updateBook)
         {
-            if(updateBook is null)
+            if (updateBook is null)
             {
                 return BadRequest();
             }
