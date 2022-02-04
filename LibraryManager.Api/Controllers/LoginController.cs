@@ -49,11 +49,11 @@ namespace LibraryManager.Api.Controllers
             
             user.Password = "";
 
-            return new
+            return Ok(new
             {
                 user,
                 token
-            };
+            });
         }
 
         [HttpPost("Register")]
