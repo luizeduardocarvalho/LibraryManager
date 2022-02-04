@@ -59,46 +59,41 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            if(registerDto is null)
+            if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
-
-            var result = await this.authService.Register(registerDto);
-
-            if(result)
+            try
             {
+                registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
+                var result = await this.authService.Register(registerDto);
                 return Ok("Registered");
             }
-
-            return StatusCode(500, "An Error Occured");
+            catch
+            {
+                return StatusCode(500, "An Error Occured");
+            }
         }
 
         [HttpPatch("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
-            var result = await this.authService.ChangePassword(changePasswordDto);
-
-            if(result)
+            try
             {
-                return Ok("Change Password");
+                var result = await this.authService.ChangePassword(changePasswordDto);
+
+                if (result)
+                {
+                    return Ok("Change Password");
+                }
+            }
+            catch
+            {
+                return StatusCode(500, "An error has occurred.");
             }
 
-            return StatusCode(500, "Change password");
+             return StatusCode(500, "An error has occurred.");
         }
-
-        [HttpGet("anonymous")]
-        [AllowAnonymous]
-        public string Anonymous() => "Anonymous";
-
-        [HttpGet("authorized")]
-        [Authorize]
-        public string Authorized() => $"Authenticated - {User.Identity.Name}";
-
-        [HttpGet("administrator")]
-        [Authorize(Roles = "Administrator")]
-        public string AuthorizedAdministrator() => $"Administrator";
     }
 }

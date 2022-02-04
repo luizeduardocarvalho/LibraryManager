@@ -99,14 +99,21 @@ namespace LibraryManager.Api.Controllers
                 return BadRequest();
             }
 
-            var result = await this.service.RenewBook(returnBookDto.BookId);
-
-            if (result != null)
+            try
             {
-                return Ok(result);
+                var result = await this.service.RenewBook(returnBookDto.BookId);
+
+                if(!string.IsNullOrEmpty(result.BookTitle))
+                {
+                    return Ok(result);
+                }
+            }
+            catch
+            {
+                return StatusCode(500, "An error has occurred.");
             }
 
-            return BadRequest();
+            return StatusCode(500, "An error has occurred.");
         }
 
         [HttpPost("Create")]
@@ -164,7 +171,12 @@ namespace LibraryManager.Api.Controllers
 
             var result = await this.service.UpdateBook(updateBook);
 
-            return Ok(result);
+            if(result)
+            {
+                return Ok("Success!");
+            }
+
+            return StatusCode(500, "An error has occurred.");
         }
     }
 }

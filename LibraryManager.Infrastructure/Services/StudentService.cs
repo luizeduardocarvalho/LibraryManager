@@ -30,10 +30,15 @@ namespace LibraryManager.Infrastructure.Services
                 TeacherId = student.TeacherId
             };
 
-            this.repository.Insert(newStudent);
-            var result = await this.repository.Save();
-
-            return result;
+            try
+            {
+                this.repository.Insert(newStudent);
+                return await this.repository.Save();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId)

@@ -27,25 +27,36 @@ namespace LibraryManager.Infrastructure.Services
                 Role = registerDto.Role
             };
 
-            this.repository.Insert(user);
-            var result = await this.repository.Save();
-
-            return result;
+            try
+            {
+                this.repository.Insert(user);
+                return await this.repository.Save();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<bool> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             var oldEncryptedPassword = this.service.Encrypt(changePasswordDto.OldPassword);
             var user = await this.repository.GetByEmailAndPassword(changePasswordDto.Email, oldEncryptedPassword);
-            var result = false;
 
             if(user != null)
             {
-                user.Password = this.service.Encrypt(changePasswordDto.NewPassword);
-                result = await this.repository.Save();
+                try
+                {
+                    user.Password = this.service.Encrypt(changePasswordDto.NewPassword);
+                    return await this.repository.Save();
+                }
+                catch
+                {
+                    throw;
+                }
             }
 
-            return result;
+            return false;
         }
     }
 }

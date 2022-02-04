@@ -109,8 +109,15 @@ namespace LibraryManager.Infrastructure.Services
 
             if (transaction != null)
             {
-                transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
-                await this.transactionRepository.Save();
+                try
+                {
+                    transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
+                    await this.transactionRepository.Save();
+                }
+                catch
+                {
+                    throw;
+                }
 
                 transactionDto = new()
                 {
@@ -139,17 +146,22 @@ namespace LibraryManager.Infrastructure.Services
         public async Task<bool> UpdateBook(UpdateBookDto updateBook)
         {
             var book = await this.bookRepository.GetById(updateBook.Id);
-            if (!string.IsNullOrEmpty(updateBook.Title))
+            if(book != null)
             {
-                book.Title = updateBook.Title;
+                if (!string.IsNullOrEmpty(updateBook.Title))
+                {
+                    book.Title = updateBook.Title;
+                }
+
+                if (!string.IsNullOrEmpty(updateBook.Description))
+                {
+                    book.Description = updateBook.Description;
+                }
+
+                return await this.bookRepository.Save();
             }
 
-            if (!string.IsNullOrEmpty(updateBook.Description))
-            {
-                book.Description = updateBook.Description;
-            }
-
-            return await this.bookRepository.Save();
+            return false;
         }
     }
 }

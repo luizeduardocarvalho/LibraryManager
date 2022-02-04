@@ -38,14 +38,21 @@ namespace LibraryManager.Api.Controllers
                 return BadRequest();
             }
 
-            var result = await this.service.Create(createStudentDto);
-
-            if (result)
+            try
             {
-                return Ok("Student created");
+                var result = await this.service.Create(createStudentDto);
+
+                if (result)
+                {
+                    return Ok("Student created");
+                }
+            }
+            catch
+            {
+                return StatusCode(500, "An error has occurred.");
             }
 
-            return StatusCode(500, "Unexpected error");
+            return StatusCode(500, "An error has occurred.");
         }
 
         [HttpGet("StudentsWithBooks")]
