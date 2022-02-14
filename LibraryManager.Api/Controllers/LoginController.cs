@@ -40,7 +40,6 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
-            logger.LogInformation(Environment.GetEnvironmentVariable("Settings"));
             var encrytpedPassword = this.encryptService.Encrypt(loginDto.Password);
             var user = await this.repository.GetByEmailAndPassword(loginDto.Email, encrytpedPassword);
 

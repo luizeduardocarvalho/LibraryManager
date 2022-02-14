@@ -1,4 +1,5 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Text;
@@ -8,15 +9,18 @@ namespace LibraryManager.Api.Configurations
     public class EncryptService : IEncryptService
     {
         private readonly IOptions<Settings> settings;
+        private readonly ILogger<EncryptService> logger;
 
-        public EncryptService(IOptions<Settings> settings)
+        public EncryptService(IOptions<Settings> settings, ILogger<EncryptService> logger)
         {
             this.settings = settings;
+            this.logger = logger;
         }
 
         public string Encrypt(string password)
         {
             var key = this.settings.Value.Secret ?? Environment.GetEnvironmentVariable("Settings");
+            logger.LogInformation("SECRET: " + key);
             var keyBytes = Encoding.UTF8.GetBytes(key);
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var hash = new System.Security.Cryptography.HMACSHA256()
