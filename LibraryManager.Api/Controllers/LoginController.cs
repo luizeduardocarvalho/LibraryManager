@@ -19,7 +19,6 @@ namespace LibraryManager.Api.Controllers
     {
         private readonly ITeacherRepository repository;
         private readonly ITokenService tokenService;
-        private readonly IOptions<Settings> settings;
         private readonly IAuthService authService;
         private readonly IEncryptService encryptService;
         private readonly ILogger<LoginController> logger;
@@ -27,14 +26,12 @@ namespace LibraryManager.Api.Controllers
         public LoginController(
             ITeacherRepository repository,
             ITokenService tokenService,
-            IOptions<Settings> settings,
             IAuthService authService,
             IEncryptService encryptService,
             ILogger<LoginController> logger)
         {
             this.repository = repository;
             this.tokenService = tokenService;
-            this.settings = settings;
             this.authService = authService;
             this.encryptService = encryptService;
             this.logger = logger;
@@ -43,6 +40,7 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
+            logger.LogInformation(Environment.GetEnvironmentVariable("Settings"));
             var encrytpedPassword = this.encryptService.Encrypt(loginDto.Password);
             var user = await this.repository.GetByEmailAndPassword(loginDto.Email, encrytpedPassword);
 
