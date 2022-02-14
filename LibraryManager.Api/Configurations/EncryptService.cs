@@ -16,7 +16,7 @@ namespace LibraryManager.Api.Configurations
 
         public string Encrypt(string password)
         {
-            var key = this.settings.Value.Secret;
+            var key = this.settings.Value.Secret ?? Environment.GetEnvironmentVariable("Settings");
             var keyBytes = Encoding.UTF8.GetBytes(key);
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var hash = new System.Security.Cryptography.HMACSHA256()
