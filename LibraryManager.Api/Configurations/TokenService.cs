@@ -21,8 +21,12 @@ namespace LibraryManager.Api.Services
 
         public string GenerateToken(User user)
         {
+            var secret = this.settings.Value.Secret;
+            if (string.IsNullOrEmpty(secret))
+                secret = Environment.GetEnvironmentVariable("Settings");
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this.settings.Value.Secret);
+            var key = Encoding.ASCII.GetBytes(secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] 
