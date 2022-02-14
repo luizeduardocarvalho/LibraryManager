@@ -157,7 +157,7 @@ namespace LibraryManager.Api
 
         public string GetConnectionString()
         {
-            var uriString = Configuration.GetConnectionString("DefaultConnectionString");
+            var uriString = Environment.GetEnvironmentVariable("DefaultConnectionString");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
             var user = uri.UserInfo.Split(':')[0];
