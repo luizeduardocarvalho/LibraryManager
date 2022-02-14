@@ -23,6 +23,8 @@ namespace LibraryManager.Api.Configurations
             if (string.IsNullOrEmpty(key))
                 key = Environment.GetEnvironmentVariable("Settings");
 
+            logger.LogInformation("LOG KEY: " + key.Length);
+
             var keyBytes = Encoding.UTF8.GetBytes(key);
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
