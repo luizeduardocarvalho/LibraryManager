@@ -1,4 +1,4 @@
-﻿using LibraryManager.Api.Configurations;
+﻿using System;
 using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Books;
@@ -6,11 +6,11 @@ using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManager.Api.Controllers
 {
@@ -20,13 +20,16 @@ namespace LibraryManager.Api.Controllers
     {
         private readonly IBookService service;
         private readonly IDistributedCache cache;
-        private readonly IOptions<Settings> settings;
+        private readonly ILogger<BooksController> logger;
 
-        public BooksController(IBookService service, IDistributedCache cache)
+        public BooksController(
+            IBookService service, 
+            IDistributedCache cache, 
+            ILogger<BooksController> logger)
         {
-            this.service = service;
-            this.cache = cache;
-            this.settings = settings;
+            this.service = service ?? throw new ArgumentNullException(nameof(service));
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [AllowAnonymous]

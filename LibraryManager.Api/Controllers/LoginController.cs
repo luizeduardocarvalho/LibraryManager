@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManager.Api.Controllers
 {
@@ -21,19 +22,22 @@ namespace LibraryManager.Api.Controllers
         private readonly IOptions<Settings> settings;
         private readonly IAuthService authService;
         private readonly IEncryptService encryptService;
+        private readonly ILogger<LoginController> logger;
 
         public LoginController(
             ITeacherRepository repository,
             ITokenService tokenService,
             IOptions<Settings> settings,
             IAuthService authService,
-            IEncryptService encryptService)
+            IEncryptService encryptService,
+            ILogger<LoginController> logger)
         {
             this.repository = repository;
             this.tokenService = tokenService;
             this.settings = settings;
             this.authService = authService;
             this.encryptService = encryptService;
+            this.logger = logger;
         }
 
         [HttpPost("login")]
@@ -68,6 +72,7 @@ namespace LibraryManager.Api.Controllers
             {
                 registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
                 var result = await this.authService.Register(registerDto);
+                logger.LogInformation($"The user {registerDto.Name} has been created.");
                 return Ok("Registered");
             }
             catch
