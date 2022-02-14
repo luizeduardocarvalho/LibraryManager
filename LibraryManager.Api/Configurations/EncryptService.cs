@@ -19,7 +19,10 @@ namespace LibraryManager.Api.Configurations
 
         public string Encrypt(string password)
         {
-            var key = this.settings.Value.Secret ?? Environment.GetEnvironmentVariable("Settings");
+            var key = this.settings.Value.Secret;
+            if (string.IsNullOrEmpty(key))
+                key = Environment.GetEnvironmentVariable("Secret");
+
             logger.LogInformation("SECRET: " + key);
             var keyBytes = Encoding.UTF8.GetBytes(key);
             var passwordBytes = Encoding.UTF8.GetBytes(password);
