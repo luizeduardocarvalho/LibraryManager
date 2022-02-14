@@ -83,6 +83,9 @@ namespace LibraryManager.Api
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
+            var settings = Environment.GetEnvironmentVariable("Settings") 
+                            ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
+            
             services
                 .AddAuthentication(x =>
                 {
@@ -97,7 +100,7 @@ namespace LibraryManager.Api
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("Settings"))),
+                            Encoding.ASCII.GetBytes(settings)),
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
@@ -157,7 +160,8 @@ namespace LibraryManager.Api
 
         public string GetConnectionString()
         {
-            var uriString = Environment.GetEnvironmentVariable("DefaultConnectionString");
+            var uriString = Environment.GetEnvironmentVariable("DefaultConnectionString") 
+                                ?? Configuration.GetConnectionString("DefaultConnectionString");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
             var user = uri.UserInfo.Split(':')[0];
