@@ -23,8 +23,8 @@ namespace LibraryManager.Api.Configurations
             if (string.IsNullOrEmpty(key))
                 key = Environment.GetEnvironmentVariable("Settings");
 
-            logger.LogInformation("SECRET: " + key);
             var keyBytes = Encoding.UTF8.GetBytes(key);
+
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var hash = new System.Security.Cryptography.HMACSHA256()
             {
