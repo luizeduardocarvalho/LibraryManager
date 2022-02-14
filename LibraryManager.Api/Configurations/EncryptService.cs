@@ -21,7 +21,7 @@ namespace LibraryManager.Api.Configurations
         {
             var key = this.settings.Value.Secret;
             if (string.IsNullOrEmpty(key))
-                key = Environment.GetEnvironmentVariable("Secret");
+                key = Environment.GetEnvironmentVariable("Settings");
 
             logger.LogInformation("SECRET: " + key);
             var keyBytes = Encoding.UTF8.GetBytes(key);
