@@ -12,5 +12,6 @@ namespace LibraryManager.Domain.Abstractions.Services
         Task<bool> Create(CreateTeacherDto teacher);
         Task<Teacher> GetByEmailAndPassword(string email, string password);
         Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents();
+        Task<bool> Delete(long id);
     }
 }

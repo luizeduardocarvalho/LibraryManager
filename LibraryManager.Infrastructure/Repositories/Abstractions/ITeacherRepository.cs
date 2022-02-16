@@ -9,5 +9,7 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
     {
         Task<Teacher> GetByEmailAndPassword(string email, string password);
         Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents();
+        Task<Teacher> GetEntityById(long id);
+        Task<bool> Delete(Teacher teacher);
     }
 }

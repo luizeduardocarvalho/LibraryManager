@@ -8,7 +8,6 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
         Task<IEnumerable<T>> GetAll();
         void Insert(T obj);
         void Update(T obj);
-        void Delete(object id);
         Task<bool> Save();
     }
 }

@@ -17,11 +17,6 @@ namespace LibraryManager.Infrastructure.Repositories
             table = this.context.Set<T>();
         }
 
-        void IBaseRepository<T>.Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-
         void Dispose()
         {
             throw new NotImplementedException();

@@ -61,5 +61,19 @@ namespace LibraryManager.Infrastructure.Repositories
                                                         }).ToList()
                                             }).ToListAsync();
         }
+
+        public async Task<Teacher> GetEntityById(long id)
+        {
+            return await this.context.Teachers.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<bool> Delete(Teacher teacher)
+        {
+            this.context.Remove(teacher);
+
+            var result = await this.context.SaveChangesAsync();
+
+            return result > 0 ? true : false;
+        }
     }
 }

@@ -3,6 +3,7 @@ using LibraryManager.Domain.Dtos;
 using LibraryManager.Domain.Dtos.Teacher;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -49,6 +50,27 @@ namespace LibraryManager.Infrastructure.Services
         public async Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents()
         {
             return await this.repository.GetTeachersWithStudents();
+        }
+
+        public async Task<bool> Delete(long id)
+        {
+            var result = false;
+            try
+            {
+                var teacher = await this.repository.GetEntityById(id);
+
+                if(teacher != null)
+                {
+                    result = await this.repository.Delete(teacher);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+
+            return result;
         }
     }
 }

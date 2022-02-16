@@ -56,5 +56,18 @@ namespace LibraryManager.Api.Controllers
 
             return Ok(report);
         }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete([FromQuery] long id)
+        {
+            var result = await this.service.Delete(id);
+
+            if(result)
+            {
+                return Ok("Success");
+            }
+
+            return BadRequest("Error");
+        }
     }
 }
