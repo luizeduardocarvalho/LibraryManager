@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace LibraryManager.Api.Controllers
 {
-    [EnableCors("CORS")]
     [ApiController]
     [Route("[controller]")]
     public class LoginController : ControllerBase
