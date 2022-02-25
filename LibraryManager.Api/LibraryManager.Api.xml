@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LibraryManager.Api</name>
+    </assembly>
+    <members>
+        <member name="M:LibraryManager.Api.Controllers.BooksController.LendBook(LibraryManager.Domain.Dtos.Books.LendBookDto)">
+            <summary>
+            Lend a book to a student
+            </summary>
+        </member>
+    </members>
+</doc>

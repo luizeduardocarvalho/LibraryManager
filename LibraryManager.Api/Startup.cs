@@ -13,11 +13,14 @@ namespace LibraryManager.Api
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.PlatformAbstractions;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
     using System.Text;
 
     public class Startup
@@ -35,6 +38,7 @@ namespace LibraryManager.Api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
+                c.IncludeXmlComments(GetXmlPath());
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryManager.Api", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -156,7 +160,7 @@ namespace LibraryManager.Api
             });
         }
 
-        public string GetConnectionString()
+        private string GetConnectionString()
         {
             var uriString = Environment.GetEnvironmentVariable("DATABASE_URL")
                                 ?? Configuration.GetConnectionString("DATABASE_URL");
@@ -168,6 +172,13 @@ namespace LibraryManager.Api
             var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4};SSL Mode=Require;Trust Server Certificate=True;",
                 uri.Host, db, user, passwd, port);
             return connStr;
+        }
+
+        private string GetXmlPath()
+        {
+            var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+            var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
+            return Path.Combine(basePath, fileName);
         }
     }
 }
