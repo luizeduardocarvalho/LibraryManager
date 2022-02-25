@@ -143,14 +143,13 @@ namespace LibraryManager.Api
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
             app.UseCors(
-                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                options => options
+                            .WithOrigins(
+                                "https://librarymanager-web-staging.herokuapp.com", 
+                                "https://librarymanager-web.herokuapp.com")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
             );
-
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                await next();
-            });
 
             app.UseHttpsRedirection();
 
