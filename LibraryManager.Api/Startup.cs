@@ -25,6 +25,8 @@ namespace LibraryManager.Api
 
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,14 +38,14 @@ namespace LibraryManager.Api
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CORS", corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
-                    // Apply CORS policy for any type of origin  
-                    .AllowAnyMethod()
-                    // Apply CORS policy for any type of http methods  
-                    .AllowAnyHeader()
-                    // Apply CORS policy for any headers  
-                    .AllowCredentials());
-                // Apply CORS policy for all users  
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder
+                                            .WithOrigins("https://https://librarymanager-web-staging.herokuapp.com")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                  });
             });
 
             services.AddControllers();
@@ -157,7 +159,7 @@ namespace LibraryManager.Api
 
             app.UseRouting();
 
-            app.UseCors("CORS");
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthentication();
 
