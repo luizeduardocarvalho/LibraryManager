@@ -19,9 +19,14 @@
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
+
             builder.Property(x => x.IsRemoved)
                 .IsRequired()
                 .HasDefaultValue(false);
+
+            builder.HasMany(x => x.Students)
+                .WithOne(x => x.Teacher)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

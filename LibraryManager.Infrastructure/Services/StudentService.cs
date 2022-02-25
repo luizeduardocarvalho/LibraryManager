@@ -26,9 +26,13 @@ namespace LibraryManager.Infrastructure.Services
         {
             var newStudent = new Student
             {
-                Name = student.Name,
-                TeacherId = student.TeacherId
+                Name = student.Name
             };
+
+            if(student.TeacherId != 0)
+            {
+                newStudent.TeacherId = student.TeacherId;
+            }
 
             try
             {
