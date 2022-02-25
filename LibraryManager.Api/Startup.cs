@@ -156,7 +156,7 @@ namespace LibraryManager.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins);
+                endpoints.MapControllers();
             });
         }
 
