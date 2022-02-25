@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryManager.Api.Controllers
 {
@@ -57,7 +58,13 @@ namespace LibraryManager.Api.Controllers
             return Ok(books);
         }
 
+        /// <summary>
+        /// Lend a book to a student
+        /// </summary>
         [HttpPost("Lend")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status424FailedDependency)]
         public async Task<IActionResult> LendBook([FromBody] LendBookDto lendBookDto)
         {
             if (lendBookDto == null)
@@ -68,7 +75,12 @@ namespace LibraryManager.Api.Controllers
             try
             {
                 var result = await this.service.LendBook(lendBookDto);
-                return Ok("Success");
+                if(result)
+                {
+                    return Ok("Success");
+                }
+
+                return StatusCode(424, "Could not lend book.");
             }
             catch
             {
