@@ -24,7 +24,12 @@
                 .HasDefaultValue(false);
 
             builder.HasOne(x => x.Teacher)
-                .WithMany(x => x.Students);
+                .WithMany(x => x.Students)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(x => x.Transactions)
+                .WithOne(x => x.Student)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
