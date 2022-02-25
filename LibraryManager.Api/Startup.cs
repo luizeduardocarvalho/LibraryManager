@@ -35,7 +35,16 @@ namespace LibraryManager.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("https://librarymanager-web-staging.herokuapp.com/",
+                                            "https://librarymanager-web.herokuapp.com/");
+                    });
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -142,14 +151,7 @@ namespace LibraryManager.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
-            app.UseCors(
-                options => options
-                            .WithOrigins(
-                                "https://librarymanager-web-staging.herokuapp.com", 
-                                "https://librarymanager-web.herokuapp.com")
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-            );
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
