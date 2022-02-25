@@ -35,16 +35,6 @@ namespace LibraryManager.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("Policy",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyHeader()
-                               .AllowAnyMethod();
-                    });
-            }); ;
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -93,6 +83,7 @@ namespace LibraryManager.Api
 
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
+            services.AddCors();
 
             var settings = Environment.GetEnvironmentVariable("Settings")
                             ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
@@ -151,7 +142,7 @@ namespace LibraryManager.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
-            app.UseCors("Policy");
+            app.UseCors(option => option.AllowAnyOrigin());
 
             app.UseHttpsRedirection();
 
