@@ -10,6 +10,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 
 namespace LibraryManager.Api.Controllers
 {
@@ -37,6 +38,7 @@ namespace LibraryManager.Api.Controllers
             this.logger = logger;
         }
 
+        [EnableCors]
         [HttpPost("login")]
         public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
