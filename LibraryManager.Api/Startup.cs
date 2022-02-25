@@ -83,8 +83,8 @@ namespace LibraryManager.Api
 
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
-            services.AddCors();
             services.AddMvc();
+            services.AddCors();
 
             var settings = Environment.GetEnvironmentVariable("Settings")
                             ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
