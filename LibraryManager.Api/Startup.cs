@@ -146,6 +146,12 @@ namespace LibraryManager.Api
                 options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
 
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                await next();
+            });
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
