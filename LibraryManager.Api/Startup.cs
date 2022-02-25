@@ -25,6 +25,8 @@ namespace LibraryManager.Api
 
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,7 +38,7 @@ namespace LibraryManager.Api
         {
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(
+                options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
                                       builder
@@ -165,7 +167,7 @@ namespace LibraryManager.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins);
             });
         }
 
