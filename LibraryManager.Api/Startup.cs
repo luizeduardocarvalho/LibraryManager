@@ -35,6 +35,7 @@ namespace LibraryManager.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -81,7 +82,6 @@ namespace LibraryManager.Api
                         GetConnectionString(),
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-            services.AddCors();
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
