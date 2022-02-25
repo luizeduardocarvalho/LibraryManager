@@ -84,7 +84,17 @@ namespace LibraryManager.Api
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
             services.AddMvc();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORS", corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
+                    // Apply CORS policy for any type of origin  
+                    .AllowAnyMethod()
+                    // Apply CORS policy for any type of http methods  
+                    .AllowAnyHeader()
+                    // Apply CORS policy for any headers  
+                    .AllowCredentials());
+                // Apply CORS policy for all users  
+            });
 
             var settings = Environment.GetEnvironmentVariable("Settings")
                             ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
@@ -143,7 +153,7 @@ namespace LibraryManager.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
-            app.UseCors(option => option.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            app.UseCors("CORS");
 
             app.UseHttpsRedirection();
 

@@ -1,19 +1,14 @@
-﻿using LibraryManager.Api.Configurations;
-using LibraryManager.Domain.Abstractions.Services;
+﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
-using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Api.Controllers
 {
+    [EnableCors("CORS")]
     [ApiController]
     [Route("[controller]")]
     public class LoginController : ControllerBase
@@ -38,18 +33,17 @@ namespace LibraryManager.Api.Controllers
             this.logger = logger;
         }
 
-        [EnableCors]
         [HttpPost("login")]
         public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
             var encrytpedPassword = this.encryptService.Encrypt(loginDto.Password);
             var user = await this.repository.GetByEmailAndPassword(loginDto.Email, encrytpedPassword);
 
-            if(user == null)
+            if (user == null)
                 return NotFound("Email or password are invalid.");
 
             var token = this.tokenService.GenerateToken(user);
-            
+
             user.Password = "";
 
             return Ok(new
@@ -62,7 +56,7 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -97,7 +91,7 @@ namespace LibraryManager.Api.Controllers
                 return StatusCode(500, "An error has occurred.");
             }
 
-             return StatusCode(500, "An error has occurred.");
+            return StatusCode(500, "An error has occurred.");
         }
     }
 }
