@@ -23,10 +23,12 @@
                 .HasDefaultValue(false);
 
             builder.HasOne(x => x.Student)
-                .WithMany(x => x.Transactions);
+                .WithMany(x => x.Transactions)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(x => x.Book)
-                .WithMany(x => x.Transactions);
+                .WithMany(x => x.Transactions)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

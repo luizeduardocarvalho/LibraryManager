@@ -24,6 +24,10 @@
 
             builder.HasOne(x => x.Author)
                 .WithMany(x => x.Books);
+
+            builder.HasMany(x => x.Transactions)
+                .WithOne(x => x.Book)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

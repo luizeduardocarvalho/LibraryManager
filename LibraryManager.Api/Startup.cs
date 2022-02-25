@@ -13,14 +13,12 @@ namespace LibraryManager.Api
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
     using System;
-    using Swashbuckle.AspNetCore.Swagger;
-    using System.Text;
     using System.Collections.Generic;
+    using System.Text;
 
     public class Startup
     {
@@ -83,9 +81,9 @@ namespace LibraryManager.Api
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
 
-            var settings = Environment.GetEnvironmentVariable("Settings") 
+            var settings = Environment.GetEnvironmentVariable("Settings")
                             ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
-            
+
             services
                 .AddAuthentication(x =>
                 {
@@ -160,7 +158,7 @@ namespace LibraryManager.Api
 
         public string GetConnectionString()
         {
-            var uriString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+            var uriString = Environment.GetEnvironmentVariable("DATABASE_URL")
                                 ?? Configuration.GetConnectionString("DATABASE_URL");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
