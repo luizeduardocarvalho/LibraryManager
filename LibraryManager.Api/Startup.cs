@@ -160,14 +160,14 @@ namespace LibraryManager.Api
 
         public string GetConnectionString()
         {
-            var uriString = Environment.GetEnvironmentVariable("DefaultConnectionString") 
-                                ?? Configuration.GetConnectionString("DefaultConnectionString");
+            var uriString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+                                ?? Configuration.GetConnectionString("DATABASE_URL");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
             var user = uri.UserInfo.Split(':')[0];
             var passwd = uri.UserInfo.Split(':')[1];
             var port = uri.Port > 0 ? uri.Port : 5432;
-            var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4}",
+            var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4};SSL Mode=Require;Trust Server Certificate=True;",
                 uri.Host, db, user, passwd, port);
             return connStr;
         }
