@@ -87,5 +87,19 @@ namespace LibraryManager.Infrastructure.Repositories
                                             }).OrderByDescending(x => x.CreationDate)
                                         .ToListAsync();
         }
+
+        public async Task<bool> HasBookBorrowed(long studentId)
+        {
+            var result = await this.context.Transactions
+                                                .Where(x => x.StudentId == studentId && x.Active)
+                                                .FirstOrDefaultAsync();
+
+            if(result != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
