@@ -42,7 +42,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 TeacherName = x.Name,
                                                 Students = x.Students
                                                     .Where(s => s.Transactions.Count > 0)
-                                                    .Select(s => 
+                                                    .Select(s =>
                                                         new GetStudentWithTransactionsDto
                                                         {
                                                             StudentId = s.Id,
@@ -51,13 +51,14 @@ namespace LibraryManager.Infrastructure.Repositories
                                                                 .Select(t =>
                                                                     new GetTransactionDto
                                                                     {
+                                                                        IsActive = t.Active,
                                                                         BookId = t.BookId,
                                                                         BookTitle = t.Book.Title,
                                                                         ReturnedAt = t.ReturnedAt,
                                                                         TransactionId = t.Id,
                                                                         CreationDate = t.LendDate,
                                                                         ReturnDate = t.ReturnDate
-                                                                    }).ToList()
+                                                                    }).Where(x => x.IsActive).ToList()
                                                         }).ToList()
                                             }).ToListAsync();
         }

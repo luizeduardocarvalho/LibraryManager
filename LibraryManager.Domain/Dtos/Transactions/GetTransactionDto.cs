@@ -4,6 +4,7 @@ namespace LibraryManager.Domain.Dtos.Transactions
 {
     public class GetTransactionDto
     {
+        public bool IsActive { get; set; }
         public long? BookId { get; set; }
         public string BookTitle { get; set; }
         public DateTimeOffset CreationDate { get; set; }
