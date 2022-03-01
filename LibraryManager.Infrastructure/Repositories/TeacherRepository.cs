@@ -20,6 +20,20 @@ namespace LibraryManager.Infrastructure.Repositories
             this.context = context;
         }
 
+        public async Task<IEnumerable<GetTeacherDto>> GetAll()
+        {
+            return await this.context.Teachers
+                                        .OrderBy(x => x.Name)
+                                        .Select(x =>
+                                            new GetTeacherDto
+                                            {
+                                                Email = x.Email,
+                                                Id = x.Id,
+                                                Name = x.Name
+                                            })
+                                        .ToListAsync();
+        }
+
         public async Task<Teacher> GetByEmailAndPassword(string email, string password)
         {
             var teacher = await this.context.Teachers.FirstOrDefaultAsync(
