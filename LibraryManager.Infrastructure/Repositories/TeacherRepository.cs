@@ -29,7 +29,8 @@ namespace LibraryManager.Infrastructure.Repositories
                                             {
                                                 Email = x.Email,
                                                 Id = x.Id,
-                                                Name = x.Name
+                                                Name = x.Name,
+                                                Reference = x.Reference
                                             })
                                         .ToListAsync();
         }
@@ -89,6 +90,16 @@ namespace LibraryManager.Infrastructure.Repositories
             var result = await this.context.SaveChangesAsync();
 
             return result > 0 ? true : false;
+        }
+
+        public async Task<int> GetLastReference()
+        {
+            return await this.context.Teachers.OrderByDescending(x => x.Reference).Select(x => x.Reference).FirstOrDefaultAsync();
+        }
+
+        public async Task<Teacher> GetByReference(int reference)
+        {
+            return await this.context.Teachers.Where(x => x.Reference == reference).FirstOrDefaultAsync();
         }
     }
 }

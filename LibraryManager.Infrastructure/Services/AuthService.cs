@@ -19,12 +19,15 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<bool> Register(RegisterDto registerDto)
         {
+            var reference = await this.repository.GetLastReference() + 1;
+
             var user = new Teacher
             {
                 Email = registerDto.Email,
                 Name = registerDto.Name,
                 Password = registerDto.Password,
-                Role = registerDto.Role
+                Role = registerDto.Role,
+                Reference = reference
             };
 
             try

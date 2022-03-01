@@ -60,6 +60,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 {
                                                     StudentId = x.Id,
                                                     StudentName = x.Name,
+                                                    TeacherName = x.Teacher.Name,
                                                     Transactions = x.Transactions.Select(x =>
                                                         new GetTransactionDto {
                                                             ReturnedAt = x.ReturnedAt,
