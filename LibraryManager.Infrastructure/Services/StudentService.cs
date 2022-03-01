@@ -10,10 +10,12 @@ namespace LibraryManager.Infrastructure.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository repository;
+        private readonly ITeacherRepository teacherRepository;
 
-        public StudentService(IStudentRepository repository)
+        public StudentService(IStudentRepository repository, ITeacherRepository teacherRepository)
         {
             this.repository = repository;
+            this.teacherRepository = teacherRepository;
         }
 
         public async Task<IEnumerable<Student>> GetAll()
@@ -64,9 +66,11 @@ namespace LibraryManager.Infrastructure.Services
         {
             var student = await this.repository.GetById(updateStudentDto.StudentId);
 
-            if(student is not null)
+            var teacher = await this.teacherRepository.GetByReference(updateStudentDto.TeacherId);
+
+            if(student is not null && teacher is not null)
             {
-                student.TeacherId = updateStudentDto.TeacherId;
+                student.TeacherId = teacher.Id;
                 return await this.repository.Save();
             }
 

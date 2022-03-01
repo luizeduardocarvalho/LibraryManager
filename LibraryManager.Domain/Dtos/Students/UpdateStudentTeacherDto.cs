@@ -3,6 +3,6 @@
     public class UpdateStudentTeacherDto
     {
         public long StudentId { get; set; }
-        public long TeacherId { get; set; }
+        public int TeacherId { get; set; }
     }
 }
