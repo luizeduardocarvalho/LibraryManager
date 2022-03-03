@@ -70,6 +70,8 @@ namespace LibraryManager.Infrastructure.Services
 
             if(student is not null && teacher is not null)
             {
+                if(!string.IsNullOrEmpty(updateStudentDto.StudentName))
+                    student.Name = updateStudentDto.StudentName;
                 student.TeacherId = teacher.Id;
                 return await this.repository.Save();
             }
