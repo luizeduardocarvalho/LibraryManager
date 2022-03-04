@@ -16,6 +16,7 @@
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Role).IsRequired();
             builder.Property(x => x.Password).IsRequired();
+            builder.Property(x => x.Reference).IsRequired();
             builder.Property(x => x.CreateDate)
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);

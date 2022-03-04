@@ -20,6 +20,21 @@ namespace LibraryManager.Infrastructure.Repositories
             this.context = context;
         }
 
+        public async Task<IEnumerable<GetTeacherDto>> GetAll()
+        {
+            return await this.context.Teachers
+                                        .OrderBy(x => x.Name)
+                                        .Select(x =>
+                                            new GetTeacherDto
+                                            {
+                                                Email = x.Email,
+                                                Id = x.Id,
+                                                Name = x.Name,
+                                                Reference = x.Reference
+                                            })
+                                        .ToListAsync();
+        }
+
         public async Task<Teacher> GetByEmailAndPassword(string email, string password)
         {
             var teacher = await this.context.Teachers.FirstOrDefaultAsync(
@@ -42,7 +57,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 TeacherName = x.Name,
                                                 Students = x.Students
                                                     .Where(s => s.Transactions.Count > 0)
-                                                    .Select(s => 
+                                                    .Select(s =>
                                                         new GetStudentWithTransactionsDto
                                                         {
                                                             StudentId = s.Id,
@@ -51,13 +66,14 @@ namespace LibraryManager.Infrastructure.Repositories
                                                                 .Select(t =>
                                                                     new GetTransactionDto
                                                                     {
+                                                                        IsActive = t.Active,
                                                                         BookId = t.BookId,
                                                                         BookTitle = t.Book.Title,
                                                                         ReturnedAt = t.ReturnedAt,
                                                                         TransactionId = t.Id,
                                                                         CreationDate = t.LendDate,
                                                                         ReturnDate = t.ReturnDate
-                                                                    }).ToList()
+                                                                    }).Where(x => x.IsActive).ToList()
                                                         }).ToList()
                                             }).ToListAsync();
         }
@@ -74,6 +90,16 @@ namespace LibraryManager.Infrastructure.Repositories
             var result = await this.context.SaveChangesAsync();
 
             return result > 0 ? true : false;
+        }
+
+        public async Task<int> GetLastReference()
+        {
+            return await this.context.Teachers.OrderByDescending(x => x.Reference).Select(x => x.Reference).FirstOrDefaultAsync();
+        }
+
+        public async Task<Teacher> GetByReference(int reference)
+        {
+            return await this.context.Teachers.Where(x => x.Reference == reference).FirstOrDefaultAsync();
         }
     }
 }

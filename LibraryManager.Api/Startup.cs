@@ -34,11 +34,10 @@ namespace LibraryManager.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(GetXmlPath());
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryManager.Api", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -81,9 +80,9 @@ namespace LibraryManager.Api
                         GetConnectionString(),
                         x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-            services.AddCors();
 
             services.Configure<Settings>(Configuration.GetSection("Settings"));
+
 
             var settings = Environment.GetEnvironmentVariable("Settings")
                             ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
@@ -142,10 +141,6 @@ namespace LibraryManager.Api
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
-            app.UseCors(
-                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-            );
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -153,6 +148,10 @@ namespace LibraryManager.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
 
             app.UseEndpoints(endpoints =>
             {
@@ -172,13 +171,6 @@ namespace LibraryManager.Api
             var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4};SSL Mode=Require;Trust Server Certificate=True;",
                 uri.Host, db, user, passwd, port);
             return connStr;
-        }
-
-        private string GetXmlPath()
-        {
-            var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-            var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
-            return Path.Combine(basePath, fileName);
         }
     }
 }

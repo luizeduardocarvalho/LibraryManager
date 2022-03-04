@@ -54,7 +54,9 @@ namespace LibraryManager.Infrastructure.Services
         {
             var activeTransactionsForBook = this.transactionRepository.GetActiveByBook(lendBookDto.BookId);
 
-            if (activeTransactionsForBook == null)
+            var hasBookBorrowed = await this.transactionRepository.HasBookBorrowed(lendBookDto.StudentId);
+
+            if (activeTransactionsForBook == null && !hasBookBorrowed)
             {
                 var transaction = new Transaction
                 {

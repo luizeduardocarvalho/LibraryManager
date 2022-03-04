@@ -18,10 +18,9 @@ namespace LibraryManager.Infrastructure.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<Teacher>> GetAll()
+        public async Task<IEnumerable<GetTeacherDto>> GetAll()
         {
-            var teachers = await this.repository.GetAll();
-            return teachers;
+            return await this.repository.GetAll();
         }
 
         public async Task<bool> Create(CreateTeacherDto teacher)

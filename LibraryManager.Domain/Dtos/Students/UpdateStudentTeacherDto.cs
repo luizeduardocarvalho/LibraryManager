@@ -2,7 +2,8 @@
 {
     public class UpdateStudentTeacherDto
     {
+        public string StudentName { get; set; }
         public long StudentId { get; set; }
-        public long TeacherId { get; set; }
+        public int TeacherId { get; set; }
     }
 }
