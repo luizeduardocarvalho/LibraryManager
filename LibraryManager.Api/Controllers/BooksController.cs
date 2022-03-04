@@ -33,7 +33,6 @@ namespace LibraryManager.Api.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
