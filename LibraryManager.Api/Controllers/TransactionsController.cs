@@ -1,6 +1,7 @@
 ﻿namespace LibraryManager.Api.Controllers
 {
     using LibraryManager.Domain.Abstractions.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
     using System.Threading.Tasks;

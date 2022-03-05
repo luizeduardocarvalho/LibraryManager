@@ -1,6 +1,7 @@
 ﻿using LibraryManager.Domain.Abstractions.Services;
 using LibraryManager.Domain.Dtos;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,7 @@ namespace LibraryManager.Api.Controllers
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] LoginDto loginDto)
         {
