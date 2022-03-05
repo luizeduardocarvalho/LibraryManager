@@ -21,6 +21,8 @@
                 .IsRequired()
                 .HasDefaultValue(DateTimeOffset.UtcNow);
 
+            builder.HasIndex(x => x.Email).IsUnique();
+
             builder.Property(x => x.IsRemoved)
                 .IsRequired()
                 .HasDefaultValue(false);
