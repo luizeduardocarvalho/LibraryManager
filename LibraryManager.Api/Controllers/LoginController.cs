@@ -64,6 +64,11 @@ namespace LibraryManager.Api.Controllers
 
             try
             {
+                if(string.IsNullOrEmpty(registerDto.Password))
+                {
+                    registerDto.Password = "123456";
+                }
+
                 registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
                 var result = await this.authService.Register(registerDto);
                 logger.LogInformation($"The user {registerDto.Name} has been created.");
