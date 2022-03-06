@@ -52,9 +52,9 @@
         }
 
         [HttpGet("GetLateBooks")]
-        public async Task<IActionResult> GetLateBooksWithStudentName()
+        public async Task<IActionResult> GetLateBooksWithStudentName([FromQuery] long teacherId)
         {
-            var lateBooks = await this.service.GetLateBooksWithStudentName();
+            var lateBooks = await this.service.GetLateBooksWithStudentName(teacherId);
 
             return Ok(lateBooks);
         }
