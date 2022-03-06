@@ -10,7 +10,7 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
     {
         Task<IEnumerable<Transaction>> GetAllByBook(long bookId);
         Transaction GetActiveByBook(long bookId);
-        Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName();
+        Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId);
         Task<IEnumerable<Transaction>> GetAllActiveTransactions();
         Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId);
         Task<bool> HasBookBorrowed(long studentId);
