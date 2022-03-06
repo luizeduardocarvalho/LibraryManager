@@ -102,5 +102,21 @@ namespace LibraryManager.Infrastructure.Repositories
         {
             return await this.context.Teachers.Where(x => x.Reference == reference).FirstOrDefaultAsync();
         }
+
+        public async Task<GetTeacherDto> GetById(long id)
+        {
+            return await this.context.Teachers
+                                        .Where(x => x.Id == id)
+                                        .Select(x =>
+                                            new GetTeacherDto
+                                            {
+                                                Email = x.Email,
+                                                Id = x.Id,
+                                                Name = x.Name,
+                                                Reference = x.Reference,
+                                                Role = x.Role
+                                            })
+                                        .FirstOrDefaultAsync();
+        }
     }
 }
