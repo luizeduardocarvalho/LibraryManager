@@ -71,5 +71,33 @@ namespace LibraryManager.Infrastructure.Services
 
             return result;
         }
+
+        public async Task<bool> UpdateTeacher(UpdateTeacherDto updateTeacher)
+        {
+            var teacher = await this.repository.GetEntityById(updateTeacher.Id);
+
+            if(teacher is not null)
+            {
+                teacher.Email = updateTeacher.Email;
+                teacher.Name = updateTeacher.Name;
+                teacher.Role = updateTeacher.Role;
+
+                try
+                {
+                    return await this.repository.Save();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        public async Task<GetTeacherDto> GetById(long id)
+        {
+            return await this.repository.GetById(id);
+        }
     }
 }

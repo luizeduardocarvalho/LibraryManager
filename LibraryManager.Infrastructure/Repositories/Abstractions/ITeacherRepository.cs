@@ -14,5 +14,6 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
         Task<bool> Delete(Teacher teacher);
         Task<int> GetLastReference();
         Task<Teacher> GetByReference(int reference);
+        Task<GetTeacherDto> GetById(long id);
     }
 }
