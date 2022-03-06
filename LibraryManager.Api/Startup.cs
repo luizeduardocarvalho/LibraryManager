@@ -13,14 +13,11 @@ namespace LibraryManager.Api
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.PlatformAbstractions;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
     using System.Text;
 
     public class Startup

@@ -57,9 +57,6 @@ namespace LibraryManager.Api.Controllers
             return Ok(books);
         }
 
-        /// <summary>
-        /// Lend a book to a student
-        /// </summary>
         [HttpPost("Lend")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -149,6 +146,7 @@ namespace LibraryManager.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBooksByTitle([FromQuery] string title)
         {
