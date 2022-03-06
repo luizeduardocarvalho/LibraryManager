@@ -30,7 +30,8 @@ namespace LibraryManager.Infrastructure.Repositories
                                                 Email = x.Email,
                                                 Id = x.Id,
                                                 Name = x.Name,
-                                                Reference = x.Reference
+                                                Reference = x.Reference,
+                                                Role = x.Role
                                             })
                                         .ToListAsync();
         }
