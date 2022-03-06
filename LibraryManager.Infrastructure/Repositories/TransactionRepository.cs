@@ -45,11 +45,12 @@ namespace LibraryManager.Infrastructure.Repositories
             return query;
         }
 
-        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName()
+        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId)
         {
             var lateBooks = await this.context.Transactions
                 .Include(x => x.Book)
                 .Include(x => x.Student)
+                .Where(x => x.Student.TeacherId == teacherId)
                 .Where(x => x.ReturnedAt == null && DateTime.Now >=  x.ReturnDate)
                 .Select(x => 
                     new LateBookWithStudentNameDto

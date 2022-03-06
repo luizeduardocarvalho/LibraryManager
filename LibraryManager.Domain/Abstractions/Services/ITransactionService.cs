@@ -10,7 +10,7 @@ namespace LibraryManager.Domain.Abstractions.Services
     {
         Task<IEnumerable<Transaction>> GetAll();
         Task<IEnumerable<Transaction>> GetAllByBook(long bookId);
-        Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName();
+        Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId);
         Task<IEnumerable<Transaction>> GetAllActiveTransactions();
         Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId);
     }

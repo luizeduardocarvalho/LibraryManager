@@ -34,9 +34,9 @@ namespace LibraryManager.Infrastructure.Services
             return transactions;
         }
 
-        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName()
+        public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId)
         {
-            return await this.repository.GetLateBooksWithStudentName();
+            return await this.repository.GetLateBooksWithStudentName(teacherId);
         }
 
         public async Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId)
