@@ -65,6 +65,7 @@ namespace LibraryManager.Infrastructure.Repositories
                                                         new GetTransactionDto {
                                                             ReturnedAt = x.ReturnedAt,
                                                             BookId = x.BookId,
+                                                            BookReference = x.Book.Reference,
                                                             BookTitle = x.Book.Title,
                                                             CreationDate = x.LendDate,
                                                             ReturnDate = x.ReturnDate,
