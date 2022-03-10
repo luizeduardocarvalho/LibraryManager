@@ -40,16 +40,21 @@ namespace LibraryManager.Api.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] CreateAuthorDto author)
         {
-            if (string.IsNullOrEmpty(author.Name))
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             try
             {
                 var result = await this.service.Create(author);
-                return Ok("Author was created");
 
+                if (result)
+                {
+                    return Ok("Author was created");
+                }
+
+                return StatusCode(500, "Unexpected error");
             }
             catch
             {
