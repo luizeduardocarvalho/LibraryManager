@@ -12,7 +12,7 @@
                 .HasKey(x => x.Id);
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Name);
+            builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Email);
             builder.Property(x => x.Password);
 
@@ -22,6 +22,8 @@
             builder.Property(x => x.IsRemoved)
                 .IsRequired()
                 .HasDefaultValue(false);
+
+            builder.HasIndex(x => x.Name).IsUnique();
 
             builder.HasOne(x => x.Teacher)
                 .WithMany(x => x.Students)
