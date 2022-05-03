@@ -1,15 +1,20 @@
 version: 2.1
 
 jobs:
-  build:
+  build-and-test:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:5.0
-
     steps:
       - checkout
       - run:
-          name: Restore Packages
-          command: dotnet restore
-      - run:
-          name: Build
-          command: dotnet build
+          working_directory: ~/LibraryManager.UnitTests
+          name: Run tests
+          command: |
+            dotnet test
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    jobs:
+      - build-and-test
