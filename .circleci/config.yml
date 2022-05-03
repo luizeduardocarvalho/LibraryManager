@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          working_directory: ~/LibraryManager.UnitTests
+          working_directory: LibraryManager.UnitTests
           name: Run tests
           command: |
             dotnet test
