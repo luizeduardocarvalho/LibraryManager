@@ -1,53 +1,55 @@
-﻿using LibraryManager.Infrastructure.Repositories.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace LibraryManager.Infrastructure.Repositories;
 
-namespace LibraryManager.Infrastructure.Repositories
+public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    private readonly LibraryManagerDbContext context;
+    public DbSet<T> table = null;
+
+    public BaseRepository(LibraryManagerDbContext context)
     {
-        private readonly LibraryManagerDbContext context;
-        public DbSet<T> table = null;
+        this.context = context;
+        table = this.context.Set<T>();
+    }
 
-        public BaseRepository(LibraryManagerDbContext context)
+    public virtual async Task<IEnumerable<T>> GetAll()
+    {
+        var entity = await this.table.ToListAsync();
+        return entity;
+    }
+
+    public async void Insert(T obj)
+    {
+        await this.table.AddAsync(obj);
+    }
+
+    public async Task<bool> Save()
+    {
+        var result = await this.context.SaveChangesAsync();
+
+        if (result > 0)
         {
-            this.context = context;
-            table = this.context.Set<T>();
+            return true;
         }
 
-        void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        return false;
+    }
 
-        public virtual async Task<IEnumerable<T>> GetAll()
-        {
-            var entity = await this.table.ToListAsync();
-            return entity;
-        }
+    void IBaseRepository<T>.Update(T obj)
+    {
+        throw new NotImplementedException();
+    }
 
-        public async void Insert(T obj)
-        {
-            await this.table.AddAsync(obj);
-        }
+    public async Task<bool> Delete(T obj)
+    {
+        this.table.Remove(obj);
 
-        public async Task<bool> Save()
-        {
-            var result = await this.context.SaveChangesAsync();
+        var result = await this.context.SaveChangesAsync();
 
-            if (result > 0)
-            {
-                return true;
-            }
+        return result > 0;
+    }
 
-            return false;
-        }
-
-        void IBaseRepository<T>.Update(T obj)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<T> GetById(long id)
+    {
+        return await this.table.FindAsync(id);
     }
 }
