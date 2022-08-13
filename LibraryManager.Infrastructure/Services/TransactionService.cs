@@ -3,6 +3,7 @@ using LibraryManager.Domain.Dtos.Books;
 using LibraryManager.Domain.Dtos.Transactions;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,29 +20,64 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<IEnumerable<Transaction>> GetAll()
         {
-            return await this.repository.GetAll();
+            try
+            {
+                return await this.repository.GetAll();
+            }
+            catch
+            {
+                throw new Exception("An error occurred while all transactions.");
+            }
         }
 
         public async Task<IEnumerable<Transaction>> GetAllActiveTransactions()
         {
-            return await this.repository.GetAllActiveTransactions();
+            try
+            {
+                return await this.repository.GetAllActiveTransactions();
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting all active transactions.");
+            }
         }
 
 
         public async Task<IEnumerable<Transaction>> GetAllByBook(long bookId)
         {
-            var transactions = await this.repository.GetAllByBook(bookId);
-            return transactions;
+            try
+            {
+                var transactions = await this.repository.GetAllByBook(bookId);
+                return transactions;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting all transactions by book.");
+            }
         }
 
         public async Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId)
         {
-            return await this.repository.GetLateBooksWithStudentName(teacherId);
+            try
+            {
+                return await this.repository.GetLateBooksWithStudentName(teacherId);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the late book list.");
+            }
         }
 
         public async Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId)
         {
-            return await this.repository.GetTransactionsWithDetailsByStudent(studentId);
+            try
+            {
+                return await this.repository.GetTransactionsWithDetailsByStudent(studentId);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the transaction list.");
+            }
         }
     }
 }

@@ -5,6 +5,7 @@
     public sealed class Book : BaseEntity
     {
         public int Reference { get; set; }
+
         public Author Author { get; set; }
 
         public long AuthorId { get; set; }

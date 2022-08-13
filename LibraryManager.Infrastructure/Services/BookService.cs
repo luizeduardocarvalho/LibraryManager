@@ -40,41 +40,49 @@ namespace LibraryManager.Infrastructure.Services
             }
             catch
             {
-                throw;
+                throw new Exception("An error occurred while creating the book.");
             }
         }
 
         public async Task<IEnumerable<Book>> GetAll()
         {
-            var books = await this.bookRepository.GetAll();
-            return books;
+            try
+            {
+                var books = await this.bookRepository.GetAll();
+                
+                return books;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting all books.");
+            }
         }
 
         public async Task<bool> LendBook(LendBookDto lendBookDto)
         {
-            var activeTransactionsForBook = this.transactionRepository.GetActiveByBook(lendBookDto.BookId);
-
-            var hasBookBorrowed = await this.transactionRepository.HasBookBorrowed(lendBookDto.StudentId);
-
-            if (activeTransactionsForBook == null && !hasBookBorrowed)
+            try
             {
-                var transaction = new Transaction
-                {
-                    BookId = lendBookDto.BookId,
-                    StudentId = lendBookDto.StudentId,
-                    LendDate = DateTimeOffset.Now,
-                    ReturnDate = DateTimeOffset.Now.AddDays(14)
-                };
+                var activeTransactionsForBook = this.transactionRepository.GetActiveByBook(lendBookDto.BookId);
 
-                try
+                var hasBookBorrowed = await this.transactionRepository.HasBookBorrowed(lendBookDto.StudentId);
+
+                if (activeTransactionsForBook == null && !hasBookBorrowed)
                 {
+                    var transaction = new Transaction
+                    {
+                        BookId = lendBookDto.BookId,
+                        StudentId = lendBookDto.StudentId,
+                        LendDate = DateTimeOffset.Now,
+                        ReturnDate = DateTimeOffset.Now.AddDays(14)
+                    };
+
                     this.transactionRepository.Insert(transaction);
                     return await this.bookRepository.Save();
                 }
-                catch
-                {
-                    throw;
-                }
+            }
+            catch
+            {
+                throw new Exception("An error occurred while lending the book.");
             }
 
             return false;
@@ -82,26 +90,35 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<GetTransactionDto> ReturnBook(long bookId)
         {
-            var transaction = this.transactionRepository.GetActiveByBook(bookId);
-            GetTransactionDto transactionDto = new() { };
-
-            if (transaction != null)
+            try
             {
-                transaction.Active = false;
-                transaction.ReturnedAt = DateTimeOffset.Now;
-                await this.transactionRepository.Save();
 
-                transactionDto = new()
+                var transaction = this.transactionRepository.GetActiveByBook(bookId);
+                GetTransactionDto transactionDto = new() { };
+
+                if (transaction != null)
                 {
-                    ReturnedAt = transaction.ReturnedAt,
-                    CreationDate = transaction.CreateDate,
-                    StudentName = transaction.Student.Name,
-                    TransactionId = transaction.Id,
-                    ReturnDate = transaction.ReturnDate
-                };
-            }
+                    transaction.Active = false;
+                    transaction.ReturnedAt = DateTimeOffset.Now;
+                    await this.transactionRepository.Save();
 
-            return transactionDto;
+                    transactionDto = new()
+                    {
+                        ReturnedAt = transaction.ReturnedAt,
+                        CreationDate = transaction.CreateDate,
+                        StudentName = transaction.Student.Name,
+                        TransactionId = transaction.Id,
+                        ReturnDate = transaction.ReturnDate
+                    };
+                }
+
+                return transactionDto;
+
+            }
+            catch
+            {
+                throw new Exception("An error occurred while returning the book.");
+            }
         }
 
         public async Task<GetTransactionDto> RenewBook(long bookId)
@@ -118,7 +135,7 @@ namespace LibraryManager.Infrastructure.Services
                 }
                 catch
                 {
-                    throw;
+                    throw new Exception("An error occurred while renewing the book.");
                 }
 
                 transactionDto = new()
@@ -147,23 +164,30 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<bool> UpdateBook(UpdateBookDto updateBook)
         {
-            var book = await this.bookRepository.GetById(updateBook.Id);
-            if(book != null)
+            try
             {
-                if (!string.IsNullOrEmpty(updateBook.Title))
+                var book = await this.bookRepository.GetById(updateBook.Id);
+                if (book != null)
                 {
-                    book.Title = updateBook.Title;
+                    if (!string.IsNullOrEmpty(updateBook.Title))
+                    {
+                        book.Title = updateBook.Title;
+                    }
+
+                    if (!string.IsNullOrEmpty(updateBook.Description))
+                    {
+                        book.Description = updateBook.Description;
+                    }
+
+                    return await this.bookRepository.Save();
                 }
 
-                if (!string.IsNullOrEmpty(updateBook.Description))
-                {
-                    book.Description = updateBook.Description;
-                }
-
-                return await this.bookRepository.Save();
+                return false;
             }
-
-            return false;
+            catch
+            {
+                throw new Exception("An error occurred while updating the book.");
+            }
         }
     }
 }

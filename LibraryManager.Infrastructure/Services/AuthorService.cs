@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Dtos.Author;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace LibraryManager.Infrastructure.Services
             }
             catch
             {
-                throw;
+                throw new Exception("An error occurred while creating an author.");
             }
         }
 

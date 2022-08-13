@@ -20,7 +20,14 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<IEnumerable<GetTeacherDto>> GetAll()
         {
-            return await this.repository.GetAll();
+            try
+            {
+                return await this.repository.GetAll();
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting all teachers.");
+            }
         }
 
         public async Task<bool> Create(CreateTeacherDto teacher)
@@ -33,71 +40,97 @@ namespace LibraryManager.Infrastructure.Services
                 Role = teacher.Role
             };
 
-            this.repository.Insert(newTeacher);
-            var result = await this.repository.Save();
+            try
+            {
+                this.repository.Insert(newTeacher);
+                var result = await this.repository.Save();
 
-            return result;
+                return result;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while creating the teacher.");
+            }
         }
 
         public async Task<Teacher> GetByEmailAndPassword(string email, string password)
         {
-            var teacher = await this.repository.GetByEmailAndPassword(email, password);
+            try
+            {
+                var teacher = await this.repository.GetByEmailAndPassword(email, password);
 
-            return teacher;
+                return teacher;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the teacher's email and password.");
+            }
         }
 
         public async Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents()
         {
-            return await this.repository.GetTeachersWithStudents();
+            try
+            {
+                return await this.repository.GetTeachersWithStudents();
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the teacher list.");
+            }
         }
 
         public async Task<bool> Delete(long id)
         {
-            var result = false;
             try
             {
                 var teacher = await this.repository.GetEntityById(id);
 
-                if(teacher != null)
+                if (teacher != null)
                 {
-                    result = await this.repository.Delete(teacher);
+                    return await this.repository.Delete(teacher);
                 }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
+
                 return false;
             }
-
-            return result;
+            catch
+            {
+                throw new Exception("An error occurred while deleting the teacher.");
+            }
         }
 
         public async Task<bool> UpdateTeacher(UpdateTeacherDto updateTeacher)
         {
-            var teacher = await this.repository.GetEntityById(updateTeacher.Id);
-
-            if(teacher is not null)
+            try
             {
-                teacher.Email = updateTeacher.Email;
-                teacher.Name = updateTeacher.Name;
-                teacher.Role = updateTeacher.Role;
+                var teacher = await this.repository.GetEntityById(updateTeacher.Id);
 
-                try
+                if (teacher is not null)
                 {
+                    teacher.Email = updateTeacher.Email;
+                    teacher.Name = updateTeacher.Name;
+                    teacher.Role = updateTeacher.Role;
+
                     return await this.repository.Save();
                 }
-                catch
-                {
-                    return false;
-                }
-            }
 
-            return false;
+                return false;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while updating the teacher.");
+            }
         }
 
         public async Task<GetTeacherDto> GetById(long id)
         {
-            return await this.repository.GetById(id);
+            try
+            {
+                return await this.repository.GetById(id);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the teacher.");
+            }
         }
     }
 }

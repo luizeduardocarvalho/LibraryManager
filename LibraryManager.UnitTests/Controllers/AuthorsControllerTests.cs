@@ -1,17 +1,15 @@
 ﻿using FluentAssertions;
 using LibraryManager.Api.Controllers;
 using LibraryManager.Domain.Abstractions.Services;
+using LibraryManager.Domain.Dtos.Author;
 using LibraryManager.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using LibraryManager.Domain.Dtos.Author;
-using Newtonsoft.Json;
-using NSubstitute.ExceptionExtensions;
 
 namespace LibraryManager.UnitTests.Controllers
 {
@@ -94,21 +92,6 @@ namespace LibraryManager.UnitTests.Controllers
             // Assert
             result.StatusCode.Should().Be(500);
             result.Value.Should().Be("Unexpected error");
-        }
-
-        [TestMethod]
-        public async Task CreateWithNullNameShouldReturnBadRequest()
-        {
-            // Arrange
-            var author = new CreateAuthorDto();
-
-            controller.ModelState.AddModelError("Name", "The Name field is required.");
-
-            // Act
-            var result = await controller.Create(author) as BadRequestObjectResult;
-
-            // Assert
-            result.StatusCode.Should().Be(400);
         }
 
         [TestMethod]

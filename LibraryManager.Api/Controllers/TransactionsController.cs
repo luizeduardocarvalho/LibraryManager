@@ -1,75 +1,68 @@
-﻿namespace LibraryManager.Api.Controllers
+﻿namespace LibraryManager.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class TransactionsController : ControllerBase
 {
-    using LibraryManager.Domain.Abstractions.Services;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
-    using System.Threading.Tasks;
+    private readonly ITransactionService service;
 
-    [ApiController]
-    [Route("[controller]")]
-    public class TransactionsController : ControllerBase
+    public TransactionsController(ITransactionService service)
     {
-        private readonly ITransactionService service;
+        this.service = service;
+    }
 
-        public TransactionsController(ITransactionService service)
+    [HttpGet]
+    public async Task<IActionResult> GeAll()
+    {
+        var transactions = await this.service.GetAll();
+
+        if (!transactions.Any())
         {
-            this.service = service;
+            return NotFound("No transactions have been found.");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GeAll()
+        return Ok(transactions);
+    }
+
+    [HttpGet("GetAllActive")]
+    public async Task<IActionResult> GetAllActiveTransactions()
+    {
+        var transactions = await this.service.GetAllActiveTransactions();
+
+        return Ok(transactions);
+    }
+
+    [HttpGet("GetAllByBook")]
+    public async Task<IActionResult> GetAllByBook([FromQuery] long bookId)
+    {
+        var transactions = await this.service.GetAllByBook(bookId);
+
+        if (!transactions.Any())
         {
-            var transactions = await this.service.GetAll();
-
-            if(!transactions.Any())
-            {
-                return NotFound("No transactions have been found.");
-            }
-
-            return Ok(transactions);
+            return NotFound("Not transaction found.");
         }
 
-        [HttpGet("GetAllActive")]
-        public async Task<IActionResult> GetAllActiveTransactions()
-        {
-            var transactions = await this.service.GetAllActiveTransactions();
+        return Ok(transactions);
+    }
 
-            return Ok(transactions);
+    [HttpGet("GetLateBooks")]
+    public async Task<IActionResult> GetLateBooksWithStudentName([FromQuery] long teacherId)
+    {
+        var lateBooks = await this.service.GetLateBooksWithStudentName(teacherId);
+
+        return Ok(lateBooks);
+    }
+
+    [HttpGet("GetTransactionsWithDetailsByStudent")]
+    public async Task<IActionResult> GetTransactionsWithDetailsByStudent([FromQuery] long studentId)
+    {
+        if (studentId == 0)
+        {
+            return BadRequest();
         }
 
-        [HttpGet("GetAllByBook")]
-        public async Task<IActionResult> GetAllByBook([FromQuery] long bookId)
-        {
-            var transactions = await this.service.GetAllByBook(bookId);
+        var transactions = await this.service.GetTransactionsWithDetailsByStudent(studentId);
 
-            if(!transactions.Any())
-            {
-                return NotFound("Not transaction found.");
-            }
-
-            return Ok(transactions);
-        }
-
-        [HttpGet("GetLateBooks")]
-        public async Task<IActionResult> GetLateBooksWithStudentName([FromQuery] long teacherId)
-        {
-            var lateBooks = await this.service.GetLateBooksWithStudentName(teacherId);
-
-            return Ok(lateBooks);
-        }
-
-        [HttpGet("GetTransactionsWithDetailsByStudent")]
-        public async Task<IActionResult> GetTransactionsWithDetailsByStudent([FromQuery] long studentId)
-        {
-            if(studentId == 0)
-            {
-                return BadRequest();
-            }
-
-            var transactions = await this.service.GetTransactionsWithDetailsByStudent(studentId);
-
-            return Ok(transactions);
-        }
+        return Ok(transactions);
     }
 }

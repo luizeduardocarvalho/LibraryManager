@@ -2,6 +2,7 @@
 using LibraryManager.Domain.Dtos.Students;
 using LibraryManager.Domain.Entities;
 using LibraryManager.Infrastructure.Repositories.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,8 +21,15 @@ namespace LibraryManager.Infrastructure.Services
 
         public async Task<IEnumerable<Student>> GetAll()
         {
-            var students = await this.repository.GetAll();
-            return students;
+            try
+            {
+                var students = await this.repository.GetAll();
+                return students;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting all students.");
+            }
         }
 
         public async Task<bool> Create(CreateStudentDto student)
@@ -31,7 +39,7 @@ namespace LibraryManager.Infrastructure.Services
                 Name = student.Name
             };
 
-            if(student.TeacherId != 0)
+            if (student.TeacherId != 0)
             {
                 newStudent.TeacherId = student.TeacherId;
             }
@@ -43,40 +51,68 @@ namespace LibraryManager.Infrastructure.Services
             }
             catch
             {
-                throw;
+                throw new Exception("An error occurred while creating the student.");
             }
         }
 
         public async Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId)
         {
-            return await this.repository.GetStudentsWithBooksByTeacher(teacherId);
+            try
+            {
+                return await this.repository.GetStudentsWithBooksByTeacher(teacherId);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while gettings the student list.");
+            }
         }
-        
+
         public async Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name)
         {
-            return await this.repository.GetStudentsByName(name);
+            try
+            {
+                return await this.repository.GetStudentsByName(name);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the students by name.");
+            }
         }
 
         public async Task<GetStudentWithTransactionsDto> GetStudentWithTransactionsById(long studentId)
         {
-            return await this.repository.GetStudentWithTransactionsById(studentId);
+            try
+            {
+                return await this.repository.GetStudentWithTransactionsById(studentId);
+            }
+            catch
+            {
+                throw new Exception("An error occurred while getting the student list.");
+            }
         }
 
         public async Task<bool> UpdateStudentTeacher(UpdateStudentTeacherDto updateStudentDto)
         {
-            var student = await this.repository.GetById(updateStudentDto.StudentId);
-
-            var teacher = await this.teacherRepository.GetByReference(updateStudentDto.TeacherId);
-
-            if(student is not null && teacher is not null)
+            try
             {
-                if(!string.IsNullOrEmpty(updateStudentDto.StudentName))
-                    student.Name = updateStudentDto.StudentName;
-                student.TeacherId = teacher.Id;
-                return await this.repository.Save();
-            }
+                var student = await this.repository.GetById(updateStudentDto.StudentId);
 
-            return false;
+                var teacher = await this.teacherRepository.GetByReference(updateStudentDto.TeacherId);
+
+                if (student is not null && teacher is not null)
+                {
+                    if (!string.IsNullOrEmpty(updateStudentDto.StudentName))
+                        student.Name = updateStudentDto.StudentName;
+                    student.TeacherId = teacher.Id;
+                    return await this.repository.Save();
+                }
+
+                return false;
+            }
+            catch
+            {
+                throw new Exception("An error occurred while updating the student's teacher.");
+            }
         }
     }
 }
