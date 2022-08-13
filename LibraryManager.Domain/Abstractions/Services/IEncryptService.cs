@@ -1,7 +1,6 @@
-﻿namespace LibraryManager.Domain.Abstractions.Services
+﻿namespace LibraryManager.Domain.Abstractions.Services;
+
+public interface IEncryptService
 {
-    public interface IEncryptService
-    {
-        string Encrypt(string password);
-    }
+    string Encrypt(string password);
 }

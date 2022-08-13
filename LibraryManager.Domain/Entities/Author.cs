@@ -1,11 +1,8 @@
-﻿namespace LibraryManager.Domain.Entities
+﻿namespace LibraryManager.Domain.Entities;
+
+public sealed class Author : BaseEntity
 {
-    using System.Collections.Generic;
+    public IList<Book> Books { get; set; }
 
-    public sealed class Author : BaseEntity
-    {
-        public IList<Book> Books { get; set; }
-
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }

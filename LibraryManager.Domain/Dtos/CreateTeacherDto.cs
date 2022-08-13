@@ -1,16 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace LibraryManager.Domain.Dtos;
 
-namespace LibraryManager.Domain.Dtos
+public class CreateTeacherDto
 {
-    public class CreateTeacherDto
-    {
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
-        public string Role { get; set; }
-    }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+    [Required]
+    public string Password { get; set; }
+    public string Role { get; set; }
 }
