@@ -1,39 +1,34 @@
-﻿using LibraryManager.Domain.Abstractions.Services;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.Text;
+﻿namespace LibraryManager.Api.Configurations;
 
-namespace LibraryManager.Api.Configurations
+public class EncryptService : IEncryptService
 {
-    public class EncryptService : IEncryptService
+    private readonly IOptions<Settings> settings;
+    private readonly ILogger<EncryptService> logger;
+
+    public EncryptService(IOptions<Settings> settings, ILogger<EncryptService> logger)
     {
-        private readonly IOptions<Settings> settings;
-        private readonly ILogger<EncryptService> logger;
+        this.settings = settings;
+        this.logger = logger;
+    }
 
-        public EncryptService(IOptions<Settings> settings, ILogger<EncryptService> logger)
+    public string Encrypt(string password)
+    {
+        var key = this.settings.Value.Secret;
+        if (string.IsNullOrEmpty(key))
         {
-            this.settings = settings;
-            this.logger = logger;
+            key = Environment.GetEnvironmentVariable("Settings");
         }
 
-        public string Encrypt(string password)
+        var keyBytes = Encoding.UTF8.GetBytes(key);
+
+        var passwordBytes = Encoding.UTF8.GetBytes(password);
+        var hash = new System.Security.Cryptography.HMACSHA256()
         {
-            var key = this.settings.Value.Secret;
-            if (string.IsNullOrEmpty(key))
-                key = Environment.GetEnvironmentVariable("Settings");
+            Key = keyBytes
+        };
 
-            var keyBytes = Encoding.UTF8.GetBytes(key);
+        var hashedPassword = hash.ComputeHash(passwordBytes);
 
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
-            var hash = new System.Security.Cryptography.HMACSHA256()
-            {
-                Key = keyBytes
-            };
-
-            var hashedPassword = hash.ComputeHash(passwordBytes);
-
-            return Convert.ToBase64String(hashedPassword);
-        }
+        return Convert.ToBase64String(hashedPassword);
     }
 }

@@ -1,13 +1,10 @@
-﻿namespace LibraryManager.Domain.Entities
+﻿namespace LibraryManager.Domain.Entities;
+
+public sealed class Teacher : User
 {
-    using System.Collections.Generic;
+    public string Name { get; set; }
 
-    public sealed class Teacher : User
-    {
-        public string Name { get; set; }
+    public int Reference { get; set; }
 
-        public int Reference { get; set; }
-
-        public IList<Student> Students { get; set; }
-    }
+    public IList<Student> Students { get; set; }
 }

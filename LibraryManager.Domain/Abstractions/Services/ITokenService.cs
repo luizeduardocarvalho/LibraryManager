@@ -1,9 +1,6 @@
-﻿using LibraryManager.Domain.Entities;
+﻿namespace LibraryManager.Domain.Abstractions.Services;
 
-namespace LibraryManager.Domain.Abstractions.Services
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string GenerateToken(User user);
-    }
+    string GenerateToken(User user);
 }

@@ -1,52 +1,44 @@
-﻿using LibraryManager.Domain.Abstractions.Services;
-using LibraryManager.Domain.Dtos.Author;
-using LibraryManager.Domain.Entities;
-using LibraryManager.Infrastructure.Repositories.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace LibraryManager.Infrastructure.Services;
 
-namespace LibraryManager.Infrastructure.Services
+public class AuthorService : IAuthorService
 {
-    public class AuthorService : IAuthorService
+    private readonly IAuthorRepository repository;
+
+    public AuthorService(IAuthorRepository repository)
     {
-        private readonly IAuthorRepository repository;
+        this.repository = repository;
+    }
 
-        public AuthorService(IAuthorRepository repository)
+    public async Task<IEnumerable<Author>> GetAll()
+    {
+        return await this.repository.GetAll();
+    }
+
+    public async Task<IEnumerable<GetAuthorDto>> GetAuthorsByName(string authorName)
+    {
+        return await this.repository.GetAuthorsByName(authorName);
+    }
+
+    public async Task<bool> Create(CreateAuthorDto author)
+    {
+        var newAuthor = new Author
         {
-            this.repository = repository;
-        }
+            Name = author.Name
+        };
 
-        public async Task<IEnumerable<Author>> GetAll()
+        try
         {
-            return await this.repository.GetAll();
+            this.repository.Insert(newAuthor);
+            return await this.repository.Save();
         }
-
-        public async Task<IEnumerable<GetAuthorDto>> GetAuthorsByName(string authorName)
+        catch
         {
-            return await this.repository.GetAuthorsByName(authorName);
+            throw new Exception("An error occurred while creating an author.");
         }
+    }
 
-        public async Task<bool> Create(CreateAuthorDto author)
-        {
-            var newAuthor = new Author
-            {
-                Name = author.Name
-            };
-
-            try
-            {
-                this.repository.Insert(newAuthor);
-                return await this.repository.Save();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)
-        {
-            return await this.repository.GetAuthorWithBooksById(authorId);
-        }
+    public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)
+    {
+        return await this.repository.GetAuthorWithBooksById(authorId);
     }
 }

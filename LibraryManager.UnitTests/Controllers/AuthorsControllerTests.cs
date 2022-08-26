@@ -1,181 +1,150 @@
-﻿using FluentAssertions;
-using LibraryManager.Api.Controllers;
-using LibraryManager.Domain.Abstractions.Services;
-using LibraryManager.Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using LibraryManager.Domain.Dtos.Author;
-using Newtonsoft.Json;
-using NSubstitute.ExceptionExtensions;
+﻿namespace LibraryManager.UnitTests.Controllers;
 
-namespace LibraryManager.UnitTests.Controllers
+[TestClass]
+public class AuthorsControllerTests
 {
-    [TestClass]
-    public class AuthorsControllerTests
+    private IAuthorService authorService;
+    private AuthorsController controller;
+
+    [TestInitialize]
+    public void Initialize()
     {
-        private IAuthorService authorService;
-        private AuthorsController controller;
+        authorService = Substitute.For<IAuthorService>();
+        controller = new AuthorsController(authorService);
+    }
 
-        [TestInitialize]
-        public void Initialize()
+    [TestMethod]
+    public async Task GetAllShouldReturnOk()
+    {
+        // Arrange
+        var authors = new List<Author>
         {
-            authorService = Substitute.For<IAuthorService>();
-            controller = new AuthorsController(authorService);
-        }
-
-        [TestMethod]
-        public async Task GetAllShouldReturnOk()
-        {
-            // Arrange
-            var authors = new List<Author>
+            new Author
             {
-                new Author
-                {
-                    Id = 1,
-                    Name = "AuthorName"
-                }
-            };
-
-            authorService.GetAll().Returns(authors);
-
-            // Act
-            var expectedAuthors = await controller.GetAll() as OkObjectResult;
-
-            // Assert
-            expectedAuthors.StatusCode.Should().Be(200);
-            expectedAuthors.Value.Should().Be(authors);
-        }
-
-        [TestMethod]
-        public async Task GetAuthorsByNameWithNullArgumentsShouldReturnBadRequest()
-        {
-            // Act
-            var result = await controller.GetAuthorsByName(default);
-
-            // Assert
-            result.Should().BeOfType(typeof(BadRequestResult));
-        }
-
-        [TestMethod]
-        public async Task GetAuthorsByNameWithAuthorNameShouldReturnOk()
-        {
-            // Assert
-            var authors = new List<GetAuthorDto>
-            {
-                new GetAuthorDto()
-                {
-                    AuthorId = 1,
-                }
-            };
-
-            var name = "AuthorName";
-
-            authorService.GetAuthorsByName(name).Returns(authors);
-
-            // Act
-            var result = await controller.GetAuthorsByName(name) as OkObjectResult;
-
-            // Assert
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be(authors);
-        }
-
-        [TestMethod]
-        public async Task CreateWithNullParameterShouldReturnInternalServerError()
-        {
-            // Act
-            var result = await controller.Create(default) as ObjectResult;
-
-            // Assert
-            result.StatusCode.Should().Be(500);
-            result.Value.Should().Be("Unexpected error");
-        }
-
-        [TestMethod]
-        public async Task CreateWithNullNameShouldReturnBadRequest()
-        {
-            // Arrange
-            var author = new CreateAuthorDto();
-
-            controller.ModelState.AddModelError("Name", "The Name field is required.");
-
-            // Act
-            var result = await controller.Create(author) as BadRequestObjectResult;
-
-            // Assert
-            result.StatusCode.Should().Be(400);
-        }
-
-        [TestMethod]
-        public async Task CreateWithNameShouldReturnOk()
-        {
-            // Arrange
-            var author = new CreateAuthorDto()
-            {
+                Id = 1,
                 Name = "AuthorName"
-            };
+            }
+        };
 
-            authorService.Create(author).Returns(true);
+        authorService.GetAll().Returns(authors);
 
-            // Act
-            var result = await controller.Create(author) as OkObjectResult;
+        // Act
+        var expectedAuthors = await controller.GetAll() as OkObjectResult;
 
-            // Assert
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be("Author was created");
-        }
+        // Assert
+        expectedAuthors.StatusCode.Should().Be(200);
+        expectedAuthors.Value.Should().Be(authors);
+    }
 
-        [TestMethod]
-        public async Task CreateWithSaveErrorShouldReturnInternalServerError()
+    [TestMethod]
+    public async Task GetAuthorsByNameWithNullArgumentsShouldReturnBadRequest()
+    {
+        // Act
+        var result = await controller.GetAuthorsByName(default);
+
+        // Assert
+        result.Should().BeOfType(typeof(BadRequestResult));
+    }
+
+    [TestMethod]
+    public async Task GetAuthorsByNameWithAuthorNameShouldReturnOk()
+    {
+        // Assert
+        var authors = new List<GetAuthorDto>
         {
-            // Arrange
-            var author = new CreateAuthorDto()
+            new GetAuthorDto()
             {
-                Name = "AuthorName"
-            };
+                AuthorId = 1,
+            }
+        };
 
-            authorService.Create(author).Throws(x => { throw new Exception(); });
+        var name = "AuthorName";
 
-            // Act
-            var result = await controller.Create(author) as ObjectResult;
+        authorService.GetAuthorsByName(name).Returns(authors);
 
-            // Arrange
-            result.StatusCode.Should().Be(500);
-            result.Value.Should().Be("Unexpected error");
-        }
+        // Act
+        var result = await controller.GetAuthorsByName(name) as OkObjectResult;
 
-        [TestMethod]
-        public async Task GetAuthorWithBooksByIdWithAuthorIdZeroShouldReturnBadRequest()
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().Be(authors);
+    }
+
+    [TestMethod]
+    public async Task CreateWithNullParameterShouldReturnInternalServerError()
+    {
+        // Act
+        var result = await controller.Create(default) as ObjectResult;
+
+        // Assert
+        result.StatusCode.Should().Be(500);
+        result.Value.Should().Be("Unexpected error");
+    }
+
+    [TestMethod]
+    public async Task CreateWithNameShouldReturnOk()
+    {
+        // Arrange
+        var author = new CreateAuthorDto()
         {
-            // Act
-            var result = await controller.GetAuthorsWithBookById(default) as BadRequestResult;
+            Name = "AuthorName"
+        };
 
-            // Assert
-            result.StatusCode.Should().Be(400);
-        }
+        authorService.Create(author).Returns(true);
 
-        [TestMethod]
-        public async Task GetAuthorWithBooksByIdShouldReturnOK()
+        // Act
+        var result = await controller.Create(author) as OkObjectResult;
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().Be("Author was created");
+    }
+
+    [TestMethod]
+    public async Task CreateWithSaveErrorShouldReturnInternalServerError()
+    {
+        // Arrange
+        var author = new CreateAuthorDto()
         {
-            // Arrange
-            var author = new GetAuthorsWithBooksDto()
-            {
-                AuthorId = 1
-            };
+            Name = "AuthorName"
+        };
 
-            authorService.GetAuthorWithBooksById(1).Returns(author);
+        authorService.Create(author).Throws(x => { throw new Exception(); });
 
-            // Act
-            var result = await controller.GetAuthorsWithBookById(1) as OkObjectResult;
+        // Act
+        var result = await controller.Create(author) as ObjectResult;
 
-            // Assert
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be(author);
-        }
+        // Arrange
+        result.StatusCode.Should().Be(500);
+        result.Value.Should().Be("Unexpected error");
+    }
+
+    [TestMethod]
+    public async Task GetAuthorWithBooksByIdWithAuthorIdZeroShouldReturnBadRequest()
+    {
+        // Act
+        var result = await controller.GetAuthorsWithBookById(default) as BadRequestResult;
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+    }
+
+    [TestMethod]
+    public async Task GetAuthorWithBooksByIdShouldReturnOK()
+    {
+        // Arrange
+        var author = new GetAuthorsWithBooksDto()
+        {
+            AuthorId = 1
+        };
+
+        authorService.GetAuthorWithBooksById(1).Returns(author);
+
+        // Act
+        var result = await controller.GetAuthorsWithBookById(1) as OkObjectResult;
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().Be(author);
     }
 }

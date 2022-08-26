@@ -1,17 +1,14 @@
-﻿namespace LibraryManager.Domain.Entities
+﻿namespace LibraryManager.Domain.Entities;
+
+public sealed class Student : User
 {
-    using System.Collections.Generic;
+    public IList<Book> Books { get; set; }
 
-    public sealed class Student : User
-    {
-        public IList<Book> Books { get; set; }
+    public string Name { get; set; }
 
-        public string Name { get; set; }
+    public Teacher? Teacher { get; set; }
 
-        public Teacher? Teacher { get; set; }
+    public long? TeacherId { get; set; }
 
-        public long? TeacherId { get; set; }
-
-        public IList<Transaction> Transactions { get; set; }
-    }
+    public IList<Transaction> Transactions { get; set; }
 }

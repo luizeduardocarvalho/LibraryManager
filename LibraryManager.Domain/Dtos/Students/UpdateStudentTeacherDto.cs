@@ -1,9 +1,8 @@
-﻿namespace LibraryManager.Domain.Dtos.Students
+﻿namespace LibraryManager.Domain.Dtos.Students;
+
+public class UpdateStudentTeacherDto
 {
-    public class UpdateStudentTeacherDto
-    {
-        public string StudentName { get; set; }
-        public long StudentId { get; set; }
-        public int TeacherId { get; set; }
-    }
+    public string StudentName { get; set; }
+    public long StudentId { get; set; }
+    public int TeacherId { get; set; }
 }
