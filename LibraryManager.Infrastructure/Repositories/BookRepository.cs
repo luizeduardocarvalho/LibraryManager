@@ -28,6 +28,22 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
             .ToListAsync();
     }
 
+    public async Task<GetBooksDto> GetBookDetailsById(long id)
+    {
+        return await this.context.Books
+            .Where(x => x.Id == id)
+            .Select(x => new GetBooksDto
+            {
+                AuthorName = x.Author.Name,
+                BookId = x.Id,
+                Description = x.Description,
+                Reference = x.Reference,
+                Status = (x.Transactions.OrderBy(x => x.LendDate).Last().ReturnedAt != null || !x.Transactions.Any()),
+                Title = x.Title,
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<GetBookDto> GetBookById(long bookId)
     {
         return await this.context.Books

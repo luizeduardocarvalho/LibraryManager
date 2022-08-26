@@ -10,4 +10,5 @@ public interface IBookService
     Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title);
     Task<GetBookDto> GetBookById(long bookId);
     Task<bool> UpdateBook(UpdateBookDto updateBook);
+    Task<GetBooksDto> GetBookDetailsById(long id);
 }

@@ -179,4 +179,16 @@ public class BookService : IBookService
             throw new Exception("An error occurred while updating the book.");
         }
     }
+
+    public async Task<GetBooksDto> GetBookDetailsById(long id)
+    {
+        try
+        {
+            return await this.bookRepository.GetBookDetailsById(id);
+        }
+        catch
+        {
+            throw new Exception("An error occurred while getting the book details.");
+        }
+    }
 }

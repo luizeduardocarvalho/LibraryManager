@@ -151,4 +151,12 @@ public class BooksController : ControllerBase
 
         return StatusCode(500, "An error has occurred.");
     }
+
+    [HttpGet("GetBookDetails")]
+    public async Task<IActionResult> GetBookDetails([FromQuery] long id)
+    {
+        var result = await this.service.GetBookDetailsById(id);
+
+        return Ok(result);
+    }
 }
