@@ -47,7 +47,6 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
                     TeacherId = x.Id,
                     TeacherName = x.Name,
                     Students = x.Students
-                        .Where(s => s.Transactions.Count > 0)
                         .Select(s =>
                             new GetStudentWithTransactionsDto
                             {
@@ -64,9 +63,12 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
                                             TransactionId = t.Id,
                                             CreationDate = t.LendDate,
                                             ReturnDate = t.ReturnDate
-                                        }).Where(x => x.IsActive).ToList()
-                            }).ToList()
-                }).ToListAsync();
+                                        }).Where(x => x.IsActive)
+                            })
+                        .Where(s => s.Transactions.Count() > 0)
+                })
+            .Where(x => x.Students.Count() > 0)
+            .ToListAsync();
     }
 
     public async Task<int> GetLastReference()
