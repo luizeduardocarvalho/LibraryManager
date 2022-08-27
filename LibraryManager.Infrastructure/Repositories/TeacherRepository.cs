@@ -41,6 +41,7 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
             .Include(x => x.Students)
             .ThenInclude(x => x.Transactions)
             .ThenInclude(x => x.Book)
+            .Where(x => x.Students.Any(s => s.Transactions.Any(t => t.Active)))
             .Select(x =>
                 new GetTeacherWithStudentsDto
                 {
@@ -63,11 +64,9 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
                                             TransactionId = t.Id,
                                             CreationDate = t.LendDate,
                                             ReturnDate = t.ReturnDate
-                                        }).Where(x => x.IsActive)
+                                        })
                             })
-                        .Where(s => s.Transactions.Count() > 0)
                 })
-            .Where(x => x.Students.Count() > 0)
             .ToListAsync();
     }
 

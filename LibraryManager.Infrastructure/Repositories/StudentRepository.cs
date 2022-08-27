@@ -61,7 +61,7 @@ public class StudentRepository : BaseRepository<Student>, IStudentRepository
                             CreationDate = x.LendDate,
                             ReturnDate = x.ReturnDate,
                             TransactionId = x.Id,
-                            IsLate = (DateTimeOffset.Now >= x.ReturnDate && x.ReturnedAt == null)
+                            IsLate = (DateTimeOffset.UtcNow >= x.ReturnDate && x.ReturnedAt == null)
                         }).OrderByDescending(x => x.CreationDate).ToList()
                 })
             .FirstOrDefaultAsync();
