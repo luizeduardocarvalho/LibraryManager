@@ -19,7 +19,7 @@ public class EncryptService : IEncryptService
             if (string.IsNullOrEmpty(key))
                 key = Environment.GetEnvironmentVariable("Settings");
 
-            var keyBytes = Encoding.UTF8.GetBytes(key);
+            var keyBytes = Encoding.UTF8.GetBytes(key!);
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var hash = new System.Security.Cryptography.HMACSHA256()
@@ -33,8 +33,8 @@ public class EncryptService : IEncryptService
         }
         catch (Exception e)
         {
-            this.logger.LogError(e, e.Message);
-            throw new Exception("An errro occurred while encrypting the password.");
+            this.logger.LogError(e, "An error occurred while encrypting the password. {0}", e.Message);
+            throw;
         }
     }
 }

@@ -8,20 +8,17 @@ public class LoginController : ControllerBase
     private readonly ITokenService tokenService;
     private readonly IAuthService authService;
     private readonly IEncryptService encryptService;
-    private readonly ILogger<LoginController> logger;
 
     public LoginController(
         ITeacherRepository repository,
         ITokenService tokenService,
         IAuthService authService,
-        IEncryptService encryptService,
-        ILogger<LoginController> logger)
+        IEncryptService encryptService)
     {
         this.repository = repository;
         this.tokenService = tokenService;
         this.authService = authService;
         this.encryptService = encryptService;
-        this.logger = logger;
     }
 
     [AllowAnonymous]
