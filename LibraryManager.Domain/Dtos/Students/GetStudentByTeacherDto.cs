@@ -1,7 +1,6 @@
-﻿namespace LibraryManager.Domain.Dtos.Students
+﻿namespace LibraryManager.Domain.Dtos.Students;
+
+public class GetStudentByTeacherDto
 {
-    public class GetStudentByTeacherDto
-    {
-        public long TeacherId { get; set; }
-    }
+    public long TeacherId { get; set; }
 }

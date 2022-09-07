@@ -1,14 +1,9 @@
-﻿using LibraryManager.Domain.Dtos.Books;
-using LibraryManager.Domain.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace LibraryManager.Infrastructure.Repositories.Abstractions;
 
-namespace LibraryManager.Infrastructure.Repositories.Abstractions
+public interface IBookRepository : IBaseRepository<Book>
 {
-    public interface IBookRepository : IBaseRepository<Book>
-    {
-        Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title);
-        Task<GetBookDto> GetBookById(long bookId);
-        Task<Book> GetById(long bookId);
-    }
+    Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title);
+    Task<GetBookDto> GetBookById(long bookId);
+    Task<Book> GetById(long bookId);
+    Task<GetBooksDto> GetBookDetailsById(long id);
 }

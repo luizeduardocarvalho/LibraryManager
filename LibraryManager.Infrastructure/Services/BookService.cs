@@ -1,56 +1,56 @@
-﻿using LibraryManager.Domain.Abstractions.Services;
-using LibraryManager.Domain.Dtos;
-using LibraryManager.Domain.Dtos.Books;
-using LibraryManager.Domain.Dtos.Transactions;
-using LibraryManager.Domain.Entities;
-using LibraryManager.Infrastructure.Repositories.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace LibraryManager.Infrastructure.Services;
 
-namespace LibraryManager.Infrastructure.Services
+public class BookService : IBookService
 {
-    public class BookService : IBookService
+    private readonly IBookRepository bookRepository;
+    private readonly ITransactionRepository transactionRepository;
+
+    public BookService(
+        IBookRepository bookRepository,
+        ITransactionRepository transactionRepository)
     {
-        private readonly IBookRepository bookRepository;
-        private readonly ITransactionRepository transactionRepository;
+        this.bookRepository = bookRepository;
+        this.transactionRepository = transactionRepository;
+    }
 
-        public BookService(
-            IBookRepository bookRepository,
-            ITransactionRepository transactionRepository)
+    public async Task<bool> Create(CreateBookDto book)
+    {
+        var newBook = new Book
         {
-            this.bookRepository = bookRepository;
-            this.transactionRepository = transactionRepository;
-        }
+            AuthorId = book.AuthorId,
+            Title = book.Title,
+            Description = book.Description,
+            Reference = book.Reference
+        };
 
-        public async Task<bool> Create(CreateBookDto book)
+        try
         {
-            var newBook = new Book
-            {
-                AuthorId = book.AuthorId,
-                Title = book.Title,
-                Description = book.Description,
-                Reference = book.Reference
-            };
-
-            try
-            {
-                this.bookRepository.Insert(newBook);
-                return await this.bookRepository.Save();
-            }
-            catch
-            {
-                throw;
-            }
+            this.bookRepository.Insert(newBook);
+            return await this.bookRepository.Save();
         }
+        catch
+        {
+            throw new Exception("An error occurred while creating the book.");
+        }
+    }
 
-        public async Task<IEnumerable<Book>> GetAll()
+    public async Task<IEnumerable<Book>> GetAll()
+    {
+        try
         {
             var books = await this.bookRepository.GetAll();
+
             return books;
         }
+        catch
+        {
+            throw new Exception("An error occurred while getting all books.");
+        }
+    }
 
-        public async Task<bool> LendBook(LendBookDto lendBookDto)
+    public async Task<bool> LendBook(LendBookDto lendBookDto)
+    {
+        try
         {
             var activeTransactionsForBook = this.transactionRepository.GetActiveByBook(lendBookDto.BookId);
 
@@ -66,22 +66,23 @@ namespace LibraryManager.Infrastructure.Services
                     ReturnDate = DateTimeOffset.Now.AddDays(14)
                 };
 
-                try
-                {
-                    this.transactionRepository.Insert(transaction);
-                    return await this.bookRepository.Save();
-                }
-                catch
-                {
-                    throw;
-                }
+                this.transactionRepository.Insert(transaction);
+                return await this.bookRepository.Save();
             }
-
-            return false;
+        }
+        catch
+        {
+            throw new Exception("An error occurred while lending the book.");
         }
 
-        public async Task<GetTransactionDto> ReturnBook(long bookId)
+        return false;
+    }
+
+    public async Task<GetTransactionDto> ReturnBook(long bookId)
+    {
+        try
         {
+
             var transaction = this.transactionRepository.GetActiveByBook(bookId);
             GetTransactionDto transactionDto = new() { };
 
@@ -102,53 +103,61 @@ namespace LibraryManager.Infrastructure.Services
             }
 
             return transactionDto;
+
         }
-
-        public async Task<GetTransactionDto> RenewBook(long bookId)
+        catch
         {
-            var transaction = this.transactionRepository.GetActiveByBook(bookId);
-            GetTransactionDto transactionDto = new() { };
+            throw new Exception("An error occurred while returning the book.");
+        }
+    }
 
-            if (transaction != null)
+    public async Task<GetTransactionDto> RenewBook(long bookId)
+    {
+        var transaction = this.transactionRepository.GetActiveByBook(bookId);
+        GetTransactionDto transactionDto = new() { };
+
+        if (transaction != null)
+        {
+            try
             {
-                try
-                {
-                    transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
-                    await this.transactionRepository.Save();
-                }
-                catch
-                {
-                    throw;
-                }
-
-                transactionDto = new()
-                {
-                    ReturnedAt = transaction.ReturnedAt,
-                    CreationDate = transaction.CreateDate,
-                    StudentName = transaction.Student.Name,
-                    TransactionId = transaction.Id,
-                    ReturnDate = transaction.ReturnDate
-                };
+                transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
+                await this.transactionRepository.Save();
+            }
+            catch
+            {
+                throw new Exception("An error occurred while renewing the book.");
             }
 
-            return transactionDto;
+            transactionDto = new()
+            {
+                ReturnedAt = transaction.ReturnedAt,
+                CreationDate = transaction.CreateDate,
+                StudentName = transaction.Student.Name,
+                TransactionId = transaction.Id,
+                ReturnDate = transaction.ReturnDate
+            };
         }
 
+        return transactionDto;
+    }
 
-        public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
-        {
-            return await this.bookRepository.GetBooksByTitle(title);
-        }
 
-        public async Task<GetBookDto> GetBookById(long bookId)
-        {
-            return await this.bookRepository.GetBookById(bookId);
-        }
+    public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
+    {
+        return await this.bookRepository.GetBooksByTitle(title);
+    }
 
-        public async Task<bool> UpdateBook(UpdateBookDto updateBook)
+    public async Task<GetBookDto> GetBookById(long bookId)
+    {
+        return await this.bookRepository.GetBookById(bookId);
+    }
+
+    public async Task<bool> UpdateBook(UpdateBookDto updateBook)
+    {
+        try
         {
             var book = await this.bookRepository.GetById(updateBook.Id);
-            if(book != null)
+            if (book != null)
             {
                 if (!string.IsNullOrEmpty(updateBook.Title))
                 {
@@ -164,6 +173,22 @@ namespace LibraryManager.Infrastructure.Services
             }
 
             return false;
+        }
+        catch
+        {
+            throw new Exception("An error occurred while updating the book.");
+        }
+    }
+
+    public async Task<GetBooksDto> GetBookDetailsById(long id)
+    {
+        try
+        {
+            return await this.bookRepository.GetBookDetailsById(id);
+        }
+        catch
+        {
+            throw new Exception("An error occurred while getting the book details.");
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
+﻿namespace LibraryManager.Domain.Dtos.Books;
 
-namespace LibraryManager.Domain.Dtos.Books
+public class LendBookDto
 {
-    public class LendBookDto
-    {
-        public long BookId { get; set; }
-        public long StudentId { get; set; }
-    }
+    public long BookId { get; set; }
+    public long StudentId { get; set; }
 }

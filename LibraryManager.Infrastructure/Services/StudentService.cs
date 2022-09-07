@@ -1,82 +1,109 @@
-﻿using LibraryManager.Domain.Abstractions.Services;
-using LibraryManager.Domain.Dtos.Students;
-using LibraryManager.Domain.Entities;
-using LibraryManager.Infrastructure.Repositories.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace LibraryManager.Infrastructure.Services;
 
-namespace LibraryManager.Infrastructure.Services
+public class StudentService : IStudentService
 {
-    public class StudentService : IStudentService
+    private readonly IStudentRepository repository;
+    private readonly ITeacherRepository teacherRepository;
+
+    public StudentService(IStudentRepository repository, ITeacherRepository teacherRepository)
     {
-        private readonly IStudentRepository repository;
-        private readonly ITeacherRepository teacherRepository;
+        this.repository = repository;
+        this.teacherRepository = teacherRepository;
+    }
 
-        public StudentService(IStudentRepository repository, ITeacherRepository teacherRepository)
-        {
-            this.repository = repository;
-            this.teacherRepository = teacherRepository;
-        }
-
-        public async Task<IEnumerable<Student>> GetAll()
+    public async Task<IEnumerable<Student>> GetAll()
+    {
+        try
         {
             var students = await this.repository.GetAll();
             return students;
         }
-
-        public async Task<bool> Create(CreateStudentDto student)
+        catch
         {
-            var newStudent = new Student
-            {
-                Name = student.Name
-            };
+            throw new Exception("An error occurred while getting all students.");
+        }
+    }
 
-            if(student.TeacherId != 0)
-            {
-                newStudent.TeacherId = student.TeacherId;
-            }
+    public async Task<bool> Create(CreateStudentDto student)
+    {
+        var newStudent = new Student
+        {
+            Name = student.Name
+        };
 
-            try
-            {
-                this.repository.Insert(newStudent);
-                return await this.repository.Save();
-            }
-            catch
-            {
-                throw;
-            }
+        if (student.TeacherId != 0)
+        {
+            newStudent.TeacherId = student.TeacherId;
         }
 
-        public async Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId)
+        try
+        {
+            this.repository.Insert(newStudent);
+            return await this.repository.Save();
+        }
+        catch
+        {
+            throw new Exception("An error occurred while creating the student.");
+        }
+    }
+
+    public async Task<IEnumerable<StudentsWithBooksDto>> GetStudentsWithBooksByTeacher(long teacherId)
+    {
+        try
         {
             return await this.repository.GetStudentsWithBooksByTeacher(teacherId);
         }
-        
-        public async Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name)
+        catch
+        {
+            throw new Exception("An error occurred while gettings the student list.");
+        }
+    }
+
+    public async Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name)
+    {
+        try
         {
             return await this.repository.GetStudentsByName(name);
         }
+        catch
+        {
+            throw new Exception("An error occurred while getting the students by name.");
+        }
+    }
 
-        public async Task<GetStudentWithTransactionsDto> GetStudentWithTransactionsById(long studentId)
+    public async Task<GetStudentWithTransactionsDto> GetStudentWithTransactionsById(long studentId)
+    {
+        try
         {
             return await this.repository.GetStudentWithTransactionsById(studentId);
         }
+        catch
+        {
+            throw new Exception("An error occurred while getting the student list.");
+        }
+    }
 
-        public async Task<bool> UpdateStudentTeacher(UpdateStudentTeacherDto updateStudentDto)
+    public async Task<bool> UpdateStudentTeacher(UpdateStudentTeacherDto updateStudentDto)
+    {
+        try
         {
             var student = await this.repository.GetById(updateStudentDto.StudentId);
 
             var teacher = await this.teacherRepository.GetByReference(updateStudentDto.TeacherId);
 
-            if(student is not null && teacher is not null)
+            if (student is not null && teacher is not null)
             {
-                if(!string.IsNullOrEmpty(updateStudentDto.StudentName))
+                if (!string.IsNullOrEmpty(updateStudentDto.StudentName))
                     student.Name = updateStudentDto.StudentName;
                 student.TeacherId = teacher.Id;
                 return await this.repository.Save();
             }
 
             return false;
+        }
+        catch
+        {
+            throw new Exception("An error occurred while updating the student's teacher.");
         }
     }
 }

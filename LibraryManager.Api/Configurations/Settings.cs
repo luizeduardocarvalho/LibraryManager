@@ -1,7 +1,6 @@
-﻿namespace LibraryManager.Api.Configurations
+﻿namespace LibraryManager.Api.Configurations;
+
+public class Settings
 {
-    public class Settings
-    {
-        public string Secret { get; set; } = string.Empty;
-    }
+    public string Secret { get; set; } = string.Empty;
 }

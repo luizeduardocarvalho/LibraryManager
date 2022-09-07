@@ -1,0 +1,13 @@
+﻿global using LibraryManager.Domain.Dtos;
+global using LibraryManager.Domain.Dtos.Author;
+global using LibraryManager.Domain.Dtos.Books;
+global using LibraryManager.Domain.Dtos.Students;
+global using LibraryManager.Domain.Dtos.Teacher;
+global using LibraryManager.Domain.Dtos.Transactions;
+global using LibraryManager.Domain.Entities;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using System;
+global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
+global using System.Threading.Tasks;
