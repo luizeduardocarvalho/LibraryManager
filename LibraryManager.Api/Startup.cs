@@ -106,8 +106,11 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
 
-        app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 
@@ -120,7 +123,12 @@ public class Startup
         app.UseAuthorization();
 
         app.UseCors(
-            options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            options => options
+                .WithOrigins(
+                    "https://librarymanager-web-staging.herokuapp.com",
+                    "https://librarymanager-web.herokuapp.com")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
         );
 
         app.UseEndpoints(endpoints =>
