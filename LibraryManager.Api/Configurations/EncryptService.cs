@@ -19,21 +19,29 @@ namespace LibraryManager.Api.Configurations
 
         public string Encrypt(string password)
         {
-            var key = this.settings.Value.Secret;
-            if (string.IsNullOrEmpty(key))
-                key = Environment.GetEnvironmentVariable("Settings");
-
-            var keyBytes = Encoding.UTF8.GetBytes(key);
-
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
-            var hash = new System.Security.Cryptography.HMACSHA256()
+            try
             {
-                Key = keyBytes
-            };
+                var key = this.settings.Value.Secret;
+                if (string.IsNullOrEmpty(key))
+                    key = Environment.GetEnvironmentVariable("Settings");
 
-            var hashedPassword = hash.ComputeHash(passwordBytes);
+                var keyBytes = Encoding.UTF8.GetBytes(key);
 
-            return Convert.ToBase64String(hashedPassword);
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var hash = new System.Security.Cryptography.HMACSHA256()
+                {
+                    Key = keyBytes
+                };
+
+                var hashedPassword = hash.ComputeHash(passwordBytes);
+
+                return Convert.ToBase64String(hashedPassword);
+            }
+            catch (Exception e)
+            {
+                this.logger.LogError(e, e.Message);
+                throw new Exception("An errro occurred while encrypting the password.");
+            }
         }
     }
 }
