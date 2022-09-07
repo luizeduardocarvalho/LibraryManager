@@ -1,14 +1,23 @@
-﻿namespace LibraryManager.Infrastructure.Services;
+﻿using LibraryManager.Domain.Entities;
+using Microsoft.Extensions.Logging;
+using System.Xml.Linq;
+
+namespace LibraryManager.Infrastructure.Services;
 
 public class StudentService : IStudentService
 {
     private readonly IStudentRepository repository;
     private readonly ITeacherRepository teacherRepository;
+    private readonly ILogger<StudentService> logger;
 
-    public StudentService(IStudentRepository repository, ITeacherRepository teacherRepository)
+    public StudentService(
+        IStudentRepository repository,
+        ITeacherRepository teacherRepository,
+        ILogger<StudentService> logger)
     {
         this.repository = repository;
         this.teacherRepository = teacherRepository;
+        this.logger = logger;
     }
 
     public async Task<IEnumerable<Student>> GetAll()
@@ -18,9 +27,10 @@ public class StudentService : IStudentService
             var students = await this.repository.GetAll();
             return students;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting all students.");
+            logger.LogError(e, "An error occurred while getting all students. {0}", e.Message);
+            throw;
         }
     }
 
@@ -41,9 +51,10 @@ public class StudentService : IStudentService
             this.repository.Insert(newStudent);
             return await this.repository.Save();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while creating the student.");
+            logger.LogError(e, "An error occurred while creating the student {}.", student.Name);
+            throw;
         }
     }
 
@@ -53,9 +64,10 @@ public class StudentService : IStudentService
         {
             return await this.repository.GetStudentsWithBooksByTeacher(teacherId);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while gettings the student list.");
+            logger.LogError(e, "An error occurred while gettings the student list for the teacher {0}.", teacherId);
+            throw;
         }
     }
 
@@ -65,9 +77,10 @@ public class StudentService : IStudentService
         {
             return await this.repository.GetStudentsByName(name);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the students by name.");
+            logger.LogError(e, "An error occurred while getting the students by the name {0}.", name);
+            throw;
         }
     }
 
@@ -77,9 +90,10 @@ public class StudentService : IStudentService
         {
             return await this.repository.GetStudentWithTransactionsById(studentId);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the student list.");
+            logger.LogError(e, "An error occurred while getting the student list for the student {0}.", studentId);
+            throw;
         }
     }
 
@@ -101,9 +115,10 @@ public class StudentService : IStudentService
 
             return false;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while updating the student's teacher.");
+            logger.LogError(e, "An error occurred while updating the student {0}'s teacher.", updateStudentDto.StudentName);
+            throw;
         }
     }
 }

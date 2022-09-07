@@ -1,12 +1,18 @@
-﻿namespace LibraryManager.Infrastructure.Services;
+﻿using LibraryManager.Domain.Entities;
+
+namespace LibraryManager.Infrastructure.Services;
 
 public class TransactionService : ITransactionService
 {
     private readonly ITransactionRepository repository;
+    private readonly ILogger<TransactionService> logger;
 
-    public TransactionService(ITransactionRepository repository)
+    public TransactionService(
+        ITransactionRepository repository,
+        ILogger<TransactionService> logger)
     {
         this.repository = repository;
+        this.logger = logger;
     }
 
     public async Task<IEnumerable<Transaction>> GetAll()
@@ -15,9 +21,10 @@ public class TransactionService : ITransactionService
         {
             return await this.repository.GetAll();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while all transactions.");
+            logger.LogError(e, "An error occurred while all transactions.");
+            throw;
         }
     }
 
@@ -27,9 +34,10 @@ public class TransactionService : ITransactionService
         {
             return await this.repository.GetAllActiveTransactions();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting all active transactions.");
+            logger.LogError(e, "An error occurred while getting all active transactions.");
+            throw;
         }
     }
 
@@ -41,9 +49,10 @@ public class TransactionService : ITransactionService
             var transactions = await this.repository.GetAllByBook(bookId);
             return transactions;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting all transactions by book.");
+            logger.LogError(e, "An error occurred while getting all transactions for the book {0}.", bookId);
+            throw;
         }
     }
 
@@ -53,9 +62,10 @@ public class TransactionService : ITransactionService
         {
             return await this.repository.GetLateBooksWithStudentName(teacherId);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the late book list.");
+            logger.LogError(e, "An error occurred while getting the late book list for the teacher {0}.", teacherId);
+            throw;
         }
     }
 
@@ -65,9 +75,10 @@ public class TransactionService : ITransactionService
         {
             return await this.repository.GetTransactionsWithDetailsByStudent(studentId);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the transaction list.");
+            logger.LogError(e, "An error occurred while getting the transaction list for the student {0}.", studentId);
+            throw;
         }
     }
 }

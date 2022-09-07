@@ -3,10 +3,14 @@
 public class TeacherService : ITeacherService
 {
     private readonly ITeacherRepository repository;
+    private readonly ILogger<TeacherService> logger;
 
-    public TeacherService(ITeacherRepository repository)
+    public TeacherService(
+        ITeacherRepository repository,
+        ILogger<TeacherService> logger)
     {
         this.repository = repository;
+        this.logger = logger;
     }
 
     public async Task<IEnumerable<GetTeacherDto>> GetAll()
@@ -15,9 +19,10 @@ public class TeacherService : ITeacherService
         {
             return await this.repository.GetAll();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting all teachers.");
+            logger.LogError(e, "An error occurred while getting all teachers.");
+            throw;
         }
     }
 
@@ -38,9 +43,10 @@ public class TeacherService : ITeacherService
 
             return result;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while creating the teacher.");
+            logger.LogError(e, "An error occurred while creating the teacher {0}.", teacher.Name);
+            throw;
         }
     }
 
@@ -52,9 +58,10 @@ public class TeacherService : ITeacherService
 
             return teacher;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the teacher's email and password.");
+            logger.LogError(e, "An error occurred while getting the teacher {0} info.", email);
+            throw;
         }
     }
 
@@ -64,9 +71,10 @@ public class TeacherService : ITeacherService
         {
             return await this.repository.GetTeachersWithStudents();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the teacher list.");
+            logger.LogError(e, "An error occurred while getting the teacher list.");
+            throw;
         }
     }
 
@@ -83,9 +91,10 @@ public class TeacherService : ITeacherService
 
             return false;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while deleting the teacher.");
+            logger.LogError(e, "An error occurred while deleting the teacher {0}.", id);
+            throw;
         }
     }
 
@@ -106,9 +115,10 @@ public class TeacherService : ITeacherService
 
             return false;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while updating the teacher.");
+            logger.LogError(e, "An error occurred while updating the teacher {0}.", updateTeacher.Name);
+            throw;
         }
     }
 
@@ -118,9 +128,10 @@ public class TeacherService : ITeacherService
         {
             return await this.repository.GetTeacherById(id);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the teacher.");
+            logger.LogError(e, "An error occurred while getting the teacher {0}.", id);
+            throw;
         }
     }
 }

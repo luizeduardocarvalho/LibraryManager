@@ -2,7 +2,7 @@
 
 public interface ITeacherRepository : IBaseRepository<Teacher>
 {
-    Task<IEnumerable<GetTeacherDto>> GetAll();
+    new Task<IEnumerable<GetTeacherDto>> GetAll();
     Task<Teacher> GetByEmailAndPassword(string email, string password);
     Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents();
     Task<int> GetLastReference();

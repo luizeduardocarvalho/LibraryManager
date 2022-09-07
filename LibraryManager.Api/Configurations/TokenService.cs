@@ -18,11 +18,12 @@ public class TokenService : ITokenService
         try
         {
             var secret = this.settings.Value.Secret;
+
             if (string.IsNullOrEmpty(secret))
                 secret = Environment.GetEnvironmentVariable("Settings");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secret);
+            var key = Encoding.ASCII.GetBytes(secret!);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
