@@ -6,7 +6,9 @@ public sealed class Student : User
 
     public string Name { get; set; }
 
+#nullable enable
     public Teacher? Teacher { get; set; }
+#nullable disable
 
     public long? TeacherId { get; set; }
 
