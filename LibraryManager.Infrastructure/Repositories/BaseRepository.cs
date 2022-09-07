@@ -3,7 +3,7 @@
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
     private readonly LibraryManagerDbContext context;
-    public DbSet<T> table = null;
+    private DbSet<T> table = null;
 
     public BaseRepository(LibraryManagerDbContext context)
     {

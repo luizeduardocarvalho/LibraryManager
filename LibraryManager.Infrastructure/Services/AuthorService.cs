@@ -3,10 +3,14 @@
 public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository repository;
+    private readonly ILogger<AuthorService> logger;
 
-    public AuthorService(IAuthorRepository repository)
+    public AuthorService(
+        IAuthorRepository repository,
+        ILogger<AuthorService> logger)
     {
         this.repository = repository;
+        this.logger = logger;
     }
 
     public async Task<IEnumerable<Author>> GetAll()
@@ -31,9 +35,10 @@ public class AuthorService : IAuthorService
             this.repository.Insert(newAuthor);
             return await this.repository.Save();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while creating an author.");
+            logger.LogError(e, "An error occurred while creating the author {0}", author.Name);
+            throw;
         }
     }
 

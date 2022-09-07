@@ -4,13 +4,16 @@ public class BookService : IBookService
 {
     private readonly IBookRepository bookRepository;
     private readonly ITransactionRepository transactionRepository;
+    private readonly ILogger<BookService> logger;
 
     public BookService(
         IBookRepository bookRepository,
-        ITransactionRepository transactionRepository)
+        ITransactionRepository transactionRepository,
+        ILogger<BookService> logger)
     {
         this.bookRepository = bookRepository;
         this.transactionRepository = transactionRepository;
+        this.logger = logger;
     }
 
     public async Task<bool> Create(CreateBookDto book)
@@ -28,9 +31,10 @@ public class BookService : IBookService
             this.bookRepository.Insert(newBook);
             return await this.bookRepository.Save();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while creating the book.");
+            logger.LogError(e, "An error occurred while creating the book {0}.", book.Title);
+            throw;
         }
     }
 
@@ -42,9 +46,10 @@ public class BookService : IBookService
 
             return books;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting all books.");
+            logger.LogError(e, "An error occurred while getting all books.");
+            throw;
         }
     }
 
@@ -70,9 +75,10 @@ public class BookService : IBookService
                 return await this.bookRepository.Save();
             }
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while lending the book.");
+            logger.LogError(e, "An error occurred while lending the book {0}.", lendBookDto.BookId);
+            throw;
         }
 
         return false;
@@ -105,9 +111,10 @@ public class BookService : IBookService
             return transactionDto;
 
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while returning the book.");
+            logger.LogError(e, "An error occurred while returning the book {0}.", bookId);
+            throw;
         }
     }
 
@@ -123,9 +130,10 @@ public class BookService : IBookService
                 transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
                 await this.transactionRepository.Save();
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception("An error occurred while renewing the book.");
+                logger.LogError(e, "An error occurred while renewing the book {0}.", bookId);
+                throw;
             }
 
             transactionDto = new()
@@ -144,12 +152,28 @@ public class BookService : IBookService
 
     public async Task<IEnumerable<GetBooksDto>> GetBooksByTitle(string title)
     {
-        return await this.bookRepository.GetBooksByTitle(title);
+        try
+        {
+            return await this.bookRepository.GetBooksByTitle(title);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occurred while getting the book {0}.", title);
+            throw;
+        }
     }
 
     public async Task<GetBookDto> GetBookById(long bookId)
     {
-        return await this.bookRepository.GetBookById(bookId);
+        try
+        {
+            return await this.bookRepository.GetBookById(bookId);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occurred while getting the book {0}.", bookId);
+            throw;
+        }
     }
 
     public async Task<bool> UpdateBook(UpdateBookDto updateBook)
@@ -174,9 +198,10 @@ public class BookService : IBookService
 
             return false;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while updating the book.");
+            logger.LogError(e, "An error occurred while updating the book {0}.", updateBook.Title);
+            throw;
         }
     }
 
@@ -186,9 +211,10 @@ public class BookService : IBookService
         {
             return await this.bookRepository.GetBookDetailsById(id);
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception("An error occurred while getting the book details.");
+            logger.LogError(e, "An error occurred while getting the book {0} details.", id);
+            throw;
         }
     }
 }

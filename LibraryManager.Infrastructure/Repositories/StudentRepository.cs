@@ -19,7 +19,7 @@ public class StudentRepository : BaseRepository<Student>, IStudentRepository
                 {
                     StudentId = x.Id,
                     Name = x.Name,
-                    NumberOfActiveBooks = x.Transactions.Where(x => x.Active).Count()
+                    NumberOfActiveBooks = x.Transactions.Count(x => x.Active)
                 })
             .ToListAsync();
 

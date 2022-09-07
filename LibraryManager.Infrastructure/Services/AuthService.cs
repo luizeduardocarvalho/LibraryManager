@@ -4,11 +4,16 @@ public class AuthService : IAuthService
 {
     private readonly ITeacherRepository repository;
     private readonly IEncryptService service;
+    private readonly ILogger<AuthorService> logger;
 
-    public AuthService(ITeacherRepository repository, IEncryptService service)
+    public AuthService(
+        ITeacherRepository repository,
+        IEncryptService service,
+        ILogger<AuthorService> logger)
     {
         this.repository = repository;
         this.service = service;
+        this.logger = logger;
     }
 
     public async Task<bool> Register(RegisterDto registerDto)
@@ -29,8 +34,9 @@ public class AuthService : IAuthService
             this.repository.Insert(user);
             return await this.repository.Save();
         }
-        catch
+        catch (Exception e)
         {
+            logger.LogError(e, "An error occurred while registering {0}", registerDto.Name);
             throw;
         }
     }
@@ -47,8 +53,9 @@ public class AuthService : IAuthService
                 user.Password = this.service.Encrypt(changePasswordDto.NewPassword);
                 return await this.repository.Save();
             }
-            catch
+            catch (Exception e)
             {
+                logger.LogError(e, "An error occurred while changing the password for {0}", changePasswordDto.Email);
                 throw;
             }
         }

@@ -48,39 +48,30 @@ public class LoginController : ControllerBase
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
-        try
+        if (string.IsNullOrEmpty(registerDto.Password))
         {
-            if (string.IsNullOrEmpty(registerDto.Password))
-            {
-                registerDto.Password = "123456";
-            }
+            registerDto.Password = "123456";
+        }
 
-            registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
-            var result = await this.authService.Register(registerDto);
-            logger.LogInformation($"The user {registerDto.Name} has been created.");
+        registerDto.Password = this.encryptService.Encrypt(registerDto.Password);
+        var result = await this.authService.Register(registerDto);
+
+        if (result)
+        {
             return Ok("Registered");
         }
-        catch
-        {
-            return StatusCode(500, "An Error Occured");
-        }
+
+        return StatusCode(500, "An Error Occured");
     }
 
     [HttpPatch("ChangePassword")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
     {
-        try
-        {
-            var result = await this.authService.ChangePassword(changePasswordDto);
+        var result = await this.authService.ChangePassword(changePasswordDto);
 
-            if (result)
-            {
-                return Ok("Change Password");
-            }
-        }
-        catch
+        if (result)
         {
-            return StatusCode(500, "An error has occurred.");
+            return Ok("Change Password");
         }
 
         return StatusCode(500, "An error has occurred.");

@@ -15,18 +15,7 @@ public class BooksController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
     {
-        //var cachedBooks = cache.GetString("Books");
-        IEnumerable<Book> books;
-
-        //if (cachedBooks == null)
-        //{
-        books = await this.service.GetAll();
-        //cache.SetString("Books", JsonSerializer.Serialize(books));
-        //}
-        //else
-        //{
-        //    books = JsonSerializer.Deserialize<IEnumerable<Book>>(cachedBooks);
-        //}
+        var books = await this.service.GetAll();
 
         if (!books.Any())
         {

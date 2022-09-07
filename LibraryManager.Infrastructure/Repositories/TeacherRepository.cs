@@ -10,7 +10,7 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
         this.context = context;
     }
 
-    public async Task<IEnumerable<GetTeacherDto>> GetAll()
+    public async new Task<IEnumerable<GetTeacherDto>> GetAll()
     {
         return await this.context.Teachers
             .OrderBy(x => x.Name)
