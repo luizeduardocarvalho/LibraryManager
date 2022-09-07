@@ -37,7 +37,7 @@ public class AuthorService : IAuthorService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while creating the author {0}", author.Name);
+            logger.LogError(e, "An error occurred while creating the author {authorName}", author.Name);
             throw;
         }
     }

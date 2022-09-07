@@ -36,7 +36,7 @@ public class AuthService : IAuthService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while registering {0}", registerDto.Name);
+            logger.LogError(e, "An error occurred while registering {registerName}", registerDto.Name);
             throw;
         }
     }
@@ -55,7 +55,7 @@ public class AuthService : IAuthService
             }
             catch (Exception e)
             {
-                logger.LogError(e, "An error occurred while changing the password for {0}", changePasswordDto.Email);
+                logger.LogError(e, "An error occurred while changing the password for {email}", changePasswordDto.Email);
                 throw;
             }
         }

@@ -45,7 +45,7 @@ public class TeacherService : ITeacherService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while creating the teacher {0}.", teacher.Name);
+            logger.LogError(e, "An error occurred while creating the teacher {teacherName}.", teacher.Name);
             throw;
         }
     }
@@ -60,7 +60,7 @@ public class TeacherService : ITeacherService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the teacher {0} info.", email);
+            logger.LogError(e, "An error occurred while getting the teacher {email} info.", email);
             throw;
         }
     }
@@ -93,7 +93,7 @@ public class TeacherService : ITeacherService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while deleting the teacher {0}.", id);
+            logger.LogError(e, "An error occurred while deleting the teacher {teacherId}.", id);
             throw;
         }
     }
@@ -117,7 +117,7 @@ public class TeacherService : ITeacherService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while updating the teacher {0}.", updateTeacher.Name);
+            logger.LogError(e, "An error occurred while updating the teacher {teacherName}.", updateTeacher.Name);
             throw;
         }
     }
@@ -130,7 +130,7 @@ public class TeacherService : ITeacherService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the teacher {0}.", id);
+            logger.LogError(e, "An error occurred while getting the teacher {teacherId}.", id);
             throw;
         }
     }

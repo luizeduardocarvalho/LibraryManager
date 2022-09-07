@@ -51,7 +51,7 @@ public class TransactionService : ITransactionService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting all transactions for the book {0}.", bookId);
+            logger.LogError(e, "An error occurred while getting all transactions for the book {bookId}.", bookId);
             throw;
         }
     }
@@ -64,7 +64,7 @@ public class TransactionService : ITransactionService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the late book list for the teacher {0}.", teacherId);
+            logger.LogError(e, "An error occurred while getting the late book list for the teacher {teacherId}.", teacherId);
             throw;
         }
     }
@@ -77,7 +77,7 @@ public class TransactionService : ITransactionService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the transaction list for the student {0}.", studentId);
+            logger.LogError(e, "An error occurred while getting the transaction list for the student {studentId}.", studentId);
             throw;
         }
     }

@@ -43,7 +43,7 @@ public class TokenService : ITokenService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while generating the token. {0}", e.Message);
+            logger.LogError(e, "An error occurred while generating the token. {message}", e.Message);
             throw;
         }
     }

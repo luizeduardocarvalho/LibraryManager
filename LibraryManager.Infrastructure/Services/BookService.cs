@@ -33,7 +33,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while creating the book {0}.", book.Title);
+            logger.LogError(e, "An error occurred while creating the book {bookTitle}.", book.Title);
             throw;
         }
     }
@@ -77,7 +77,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while lending the book {0}.", lendBookDto.BookId);
+            logger.LogError(e, "An error occurred while lending the book {bookId}.", lendBookDto.BookId);
             throw;
         }
 
@@ -113,7 +113,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while returning the book {0}.", bookId);
+            logger.LogError(e, "An error occurred while returning the book {bookId}.", bookId);
             throw;
         }
     }
@@ -132,7 +132,7 @@ public class BookService : IBookService
             }
             catch (Exception e)
             {
-                logger.LogError(e, "An error occurred while renewing the book {0}.", bookId);
+                logger.LogError(e, "An error occurred while renewing the book {bookId}.", bookId);
                 throw;
             }
 
@@ -158,7 +158,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the book {0}.", title);
+            logger.LogError(e, "An error occurred while getting the book {bookTitle}.", title);
             throw;
         }
     }
@@ -171,7 +171,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the book {0}.", bookId);
+            logger.LogError(e, "An error occurred while getting the book {bookId}.", bookId);
             throw;
         }
     }
@@ -200,7 +200,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while updating the book {0}.", updateBook.Title);
+            logger.LogError(e, "An error occurred while updating the book {bookTitle}.", updateBook.Title);
             throw;
         }
     }
@@ -213,7 +213,7 @@ public class BookService : IBookService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the book {0} details.", id);
+            logger.LogError(e, "An error occurred while getting the book {bookId} details.", id);
             throw;
         }
     }

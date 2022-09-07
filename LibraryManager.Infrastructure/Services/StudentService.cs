@@ -29,7 +29,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting all students. {0}", e.Message);
+            logger.LogError(e, "An error occurred while getting all students. {message}", e.Message);
             throw;
         }
     }
@@ -53,7 +53,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while creating the student {}.", student.Name);
+            logger.LogError(e, "An error occurred while creating the student {studentName}.", student.Name);
             throw;
         }
     }
@@ -66,7 +66,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while gettings the student list for the teacher {0}.", teacherId);
+            logger.LogError(e, "An error occurred while gettings the student list for the teacher {teacherId}.", teacherId);
             throw;
         }
     }
@@ -79,7 +79,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the students by the name {0}.", name);
+            logger.LogError(e, "An error occurred while getting the students by the name {studentName}.", name);
             throw;
         }
     }
@@ -92,7 +92,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting the student list for the student {0}.", studentId);
+            logger.LogError(e, "An error occurred while getting the student list for the student {studentName}.", studentId);
             throw;
         }
     }
@@ -117,7 +117,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while updating the student {0}'s teacher.", updateStudentDto.StudentName);
+            logger.LogError(e, "An error occurred while updating the student {studentName}'s teacher.", updateStudentDto.StudentName);
             throw;
         }
     }

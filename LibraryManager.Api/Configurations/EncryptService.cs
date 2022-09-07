@@ -33,7 +33,7 @@ public class EncryptService : IEncryptService
         }
         catch (Exception e)
         {
-            this.logger.LogError(e, "An error occurred while encrypting the password. {0}", e.Message);
+            this.logger.LogError(e, "An error occurred while encrypting the password. {message}", e.Message);
             throw;
         }
     }
