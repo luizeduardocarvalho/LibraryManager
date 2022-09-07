@@ -11,31 +11,30 @@ public class EncryptService : IEncryptService
         this.logger = logger;
     }
 
-        public string Encrypt(string password)
+    public string Encrypt(string password)
+    {
+        try
         {
-            try
+            var key = this.settings.Value.Secret;
+            if (string.IsNullOrEmpty(key))
+                key = Environment.GetEnvironmentVariable("Settings");
+
+            var keyBytes = Encoding.UTF8.GetBytes(key);
+
+            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var hash = new System.Security.Cryptography.HMACSHA256()
             {
-                var key = this.settings.Value.Secret;
-                if (string.IsNullOrEmpty(key))
-                    key = Environment.GetEnvironmentVariable("Settings");
+                Key = keyBytes
+            };
 
-                var keyBytes = Encoding.UTF8.GetBytes(key);
+            var hashedPassword = hash.ComputeHash(passwordBytes);
 
-                var passwordBytes = Encoding.UTF8.GetBytes(password);
-                var hash = new System.Security.Cryptography.HMACSHA256()
-                {
-                    Key = keyBytes
-                };
-
-                var hashedPassword = hash.ComputeHash(passwordBytes);
-
-                return Convert.ToBase64String(hashedPassword);
-            }
-            catch (Exception e)
-            {
-                this.logger.LogError(e, e.Message);
-                throw new Exception("An errro occurred while encrypting the password.");
-            }
+            return Convert.ToBase64String(hashedPassword);
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, e.Message);
+            throw new Exception("An errro occurred while encrypting the password.");
         }
     }
 }
