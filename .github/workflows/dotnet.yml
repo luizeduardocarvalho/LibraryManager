@@ -41,7 +41,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"luizeduardocarvalho_LibraryManager" /o:"luizeduardocarvalho" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        run: | 
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"luizeduardocarvalho_LibraryManager" /o:"luizeduardocarvalho" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.xml
+          dotnet tool install --global coverlet.console
           dotnet build
+          coverlet ".\LibraryManager.UnitTests\bin\Debug\net6.0\LibraryManager.UnitTests.dll" --target "dotnet" --targetargs "test --no-build" -f=opencover -o="coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
