@@ -29,7 +29,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while getting all students. {message}", e.Message);
+            logger.LogError(e, "An error occurred while getting all students.");
             throw;
         }
     }
@@ -66,7 +66,7 @@ public class StudentService : IStudentService
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while gettings the student list for the teacher {teacherId}.", teacherId);
+            logger.LogError(e, "An error occurred while getting the student list for the teacher {teacherId}.", teacherId);
             throw;
         }
     }
