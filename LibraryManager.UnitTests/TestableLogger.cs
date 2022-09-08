@@ -25,7 +25,9 @@ public abstract class TestableLogger : ILogger
 
     public abstract IDisposable BeginScopeState<TState>(TState state);
 
+#nullable enable
     public abstract void Log(LogLevel logLevel, EventId eventId, string? message, Exception exception);
+#nullable disable
 }
 
 public abstract class TestableLogger<TCategoryName> : TestableLogger, ILogger<TCategoryName>
