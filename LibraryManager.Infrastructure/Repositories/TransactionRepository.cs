@@ -25,7 +25,10 @@ public class TransactionRepository : BaseRepository<Transaction>, ITransactionRe
 
     public Transaction GetActiveByBook(long bookId)
     {
-        return this.context.Transactions.Include(x => x.Student).FirstOrDefault(x => x.Active && x.BookId == bookId);
+        return this.context.Transactions
+            .Include(x => x.Student)
+            .Include(x => x.Book)
+            .FirstOrDefault(x => x.Active && x.BookId == bookId);
     }
 
     private IIncludableQueryable<Transaction, Student> GetAllWithBookAndStudent()

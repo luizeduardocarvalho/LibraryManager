@@ -40,7 +40,7 @@ public class BooksController : ControllerBase
 
         if (result)
         {
-            return Ok("Success");
+            return Ok();
         }
 
         return StatusCode(400, "Could not lend book.");

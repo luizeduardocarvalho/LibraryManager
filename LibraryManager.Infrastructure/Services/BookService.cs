@@ -67,8 +67,8 @@ public class BookService : IBookService
                 {
                     BookId = lendBookDto.BookId,
                     StudentId = lendBookDto.StudentId,
-                    LendDate = DateTimeOffset.Now,
-                    ReturnDate = DateTimeOffset.Now.AddDays(14)
+                    LendDate = DateTimeOffset.Now.UtcDateTime,
+                    ReturnDate = DateTimeOffset.Now.UtcDateTime.AddDays(14)
                 };
 
                 this.transactionRepository.Insert(transaction);
@@ -95,7 +95,7 @@ public class BookService : IBookService
             if (transaction != null)
             {
                 transaction.Active = false;
-                transaction.ReturnedAt = DateTimeOffset.Now;
+                transaction.ReturnedAt = DateTimeOffset.Now.UtcDateTime;
                 await this.transactionRepository.Save();
 
                 transactionDto = new()
@@ -127,7 +127,7 @@ public class BookService : IBookService
         {
             try
             {
-                transaction.ReturnDate = DateTimeOffset.Now.AddDays(7);
+                transaction.ReturnDate = DateTimeOffset.Now.UtcDateTime.AddDays(7);
                 await this.transactionRepository.Save();
             }
             catch (Exception e)
@@ -142,7 +142,8 @@ public class BookService : IBookService
                 CreationDate = transaction.CreateDate,
                 StudentName = transaction.Student.Name,
                 TransactionId = transaction.Id,
-                ReturnDate = transaction.ReturnDate
+                ReturnDate = transaction.ReturnDate,
+                BookTitle = transaction.Book.Title
             };
         }
 
