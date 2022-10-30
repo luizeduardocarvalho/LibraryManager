@@ -55,7 +55,7 @@ public class LoginController : ControllerBase
 
         if (result)
         {
-            return Ok("Registered");
+            return Ok();
         }
 
         return StatusCode(500, "An Error Occured");

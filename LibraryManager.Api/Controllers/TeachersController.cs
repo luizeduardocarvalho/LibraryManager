@@ -27,7 +27,7 @@ public class TeachersController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateTeacherDto teacher)
     {
         await this.service.Create(teacher);
-        return Ok("Teacher Created.");
+        return Ok();
     }
 
     [HttpGet("TeacherReport")]
@@ -45,7 +45,7 @@ public class TeachersController : ControllerBase
 
         if (result)
         {
-            return Ok("Success");
+            return Ok();
         }
 
         return BadRequest("Error");

@@ -35,13 +35,13 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
         return teacher;
     }
 
+    // TODO: Refactor
     public async Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents()
     {
         return await this.context.Teachers
             .Include(x => x.Students)
             .ThenInclude(x => x.Transactions)
             .ThenInclude(x => x.Book)
-            .Where(x => x.Students.Any(s => s.Transactions.Any(t => t.Active)))
             .Select(x =>
                 new GetTeacherWithStudentsDto
                 {
@@ -65,8 +65,11 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
                                             CreationDate = t.LendDate,
                                             ReturnDate = t.ReturnDate
                                         })
+                                    .Where(x => x.IsActive)
                             })
+                        .Where(x => x.Transactions.Any(t => t.IsActive))
                 })
+            .Where(x => x.Students.Any(s => s.Transactions.Any(t => t.IsActive)))
             .ToListAsync();
     }
 
