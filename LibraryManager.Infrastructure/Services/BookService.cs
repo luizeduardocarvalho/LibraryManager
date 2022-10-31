@@ -1,4 +1,6 @@
-﻿namespace LibraryManager.Infrastructure.Services;
+﻿using LibraryManager.Domain.Exceptions;
+
+namespace LibraryManager.Infrastructure.Services;
 
 public class BookService : IBookService
 {
@@ -16,20 +18,29 @@ public class BookService : IBookService
         this.logger = logger;
     }
 
-    public async Task<bool> Create(CreateBookDto book)
+    public async Task<Book> Create(CreateBookDto book)
     {
-        var newBook = new Book
-        {
-            AuthorId = book.AuthorId,
-            Title = book.Title,
-            Description = book.Description,
-            Reference = book.Reference
-        };
-
         try
         {
+            var bookAlreadyExists =
+                await this.bookRepository.GetByReference(book.Reference);
+
+            if (bookAlreadyExists is not null)
+            {
+                throw new HttpResponseException(400, "Book reference is alrady in use.");
+            }
+
+            var newBook = new Book
+            {
+                AuthorId = book.AuthorId,
+                Title = book.Title,
+                Description = book.Description,
+                Reference = book.Reference
+            };
+
             this.bookRepository.Insert(newBook);
-            return await this.bookRepository.Save();
+            await this.bookRepository.Save();
+            return newBook;
         }
         catch (Exception e)
         {

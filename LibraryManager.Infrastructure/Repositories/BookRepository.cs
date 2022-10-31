@@ -28,6 +28,19 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
             .ToListAsync();
     }
 
+    async Task<GetBookDto> IBookRepository.GetByReference(int reference)
+    {
+        return await this.context.Books
+            .Where(x => x.Reference == reference)
+            .Select(x => new GetBookDto
+            {
+                BookId = x.Id,
+                Description = x.Description,
+                Title = x.Title,
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<GetBooksDto> GetBookDetailsById(long id)
     {
         return await this.context.Books

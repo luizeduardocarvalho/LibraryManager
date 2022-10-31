@@ -23,6 +23,19 @@ public class AuthorService : IAuthorService
         return await this.repository.GetAuthorsByName(authorName);
     }
 
+    async Task<IList<GetAuthorDto>> IAuthorService.GetSimpleAuthors()
+    {
+        try
+        {
+            return await this.repository.GetSimpleAuthors().ConfigureAwait(false);
+        }
+        catch(Exception e)
+        {
+            this.logger.LogError(e, "An error occurred while getting simple authors");
+            throw;
+        }
+    }
+
     public async Task<bool> Create(CreateAuthorDto author)
     {
         var newAuthor = new Author

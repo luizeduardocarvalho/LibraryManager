@@ -3,7 +3,7 @@
 public interface IBookService
 {
     Task<IEnumerable<Book>> GetAll();
-    Task<bool> Create(CreateBookDto book);
+    Task<Book> Create(CreateBookDto book);
     Task<bool> LendBook(LendBookDto lendBookDto);
     Task<GetTransactionDto> ReturnBook(long bookId);
     Task<GetTransactionDto> RenewBook(long bookId);

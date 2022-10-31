@@ -19,6 +19,14 @@ public class AuthorsController : ControllerBase
         return Ok(authors);
     }
 
+    [HttpGet("GetSimpleAuthors")]
+    public async Task<IActionResult> GetSimpleAuthors()
+    {
+        var authors = await this.service.GetSimpleAuthors();
+
+        return Ok(authors);
+    }
+
     [HttpGet("GetAuthorsByName")]
     public async Task<IActionResult> GetAuthorsByName([FromQuery] string authorName)
     {

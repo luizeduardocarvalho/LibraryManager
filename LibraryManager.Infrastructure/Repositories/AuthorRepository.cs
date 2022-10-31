@@ -23,6 +23,18 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
             .ToListAsync();
     }
 
+    async Task<IList<GetAuthorDto>> IAuthorRepository.GetSimpleAuthors()
+    {
+        return await this.context.Authors
+            .Select(x => new GetAuthorDto
+            {
+                AuthorId = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync()
+            .ConfigureAwait(false);
+    }
+
     public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)
     {
         return await this.context.Authors

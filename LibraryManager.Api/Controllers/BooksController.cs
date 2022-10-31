@@ -91,9 +91,9 @@ public class BooksController : ControllerBase
             return BadRequest();
         }
 
-        await this.service.Create(createBookDto);
+        var result = await this.service.Create(createBookDto);
 
-        return StatusCode(201, "Book created");
+        return Created($"/books/{result.Id}", result);
     }
 
     [Authorize]

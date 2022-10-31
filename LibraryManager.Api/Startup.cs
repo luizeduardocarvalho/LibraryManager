@@ -12,7 +12,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors();
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<HttpResponseExceptionFilter>();
+        });
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryManager.Api", Version = "v1" });
@@ -57,9 +60,7 @@ public class Startup
                     GetConnectionString(),
                     x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-
         services.Configure<Settings>(Configuration.GetSection("Settings"));
-
 
         var settings = Environment.GetEnvironmentVariable("Settings")
                         ?? Configuration.GetSection("Settings").GetSection("Secret").Value;
