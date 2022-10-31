@@ -8,6 +8,4 @@ public interface ITeacherRepository : IBaseRepository<Teacher>
     Task<int> GetLastReference();
     Task<Teacher> GetByReference(int reference);
     Task<GetTeacherDto> GetTeacherById(long id);
-    Task<Teacher> GetById(long id);
-    Task<bool> Delete(Teacher teacher);
 }

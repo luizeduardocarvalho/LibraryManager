@@ -1,4 +1,5 @@
 ﻿global using LibraryManager.Api.Configurations;
+global using LibraryManager.Api.Filters;
 global using LibraryManager.Api.Services;
 global using LibraryManager.Domain.Abstractions.Services;
 global using LibraryManager.Domain.Dtos;

@@ -36,7 +36,7 @@ public class StudentsController : ControllerBase
 
         if (result)
         {
-            return Ok("Student created");
+            return Ok();
         }
 
         return BadRequest("An error occurred while creating the student.");
@@ -93,9 +93,17 @@ public class StudentsController : ControllerBase
 
         if (result)
         {
-            return Ok("Ok");
+            return Ok();
         }
 
         return StatusCode(500, "Error");
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromQuery] long id)
+    {
+        await this.service.Delete(id);
+
+        return Ok();
     }
 }

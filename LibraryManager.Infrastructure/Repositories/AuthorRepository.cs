@@ -35,6 +35,18 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
             .ConfigureAwait(false);
     }
 
+    async Task<GetAuthorDto> IAuthorRepository.GetAuthorById(long id)
+    {
+        return await this.context.Authors
+            .Where(x => x.Id == id)
+            .Select(x => new GetAuthorDto
+            {
+                AuthorId = x.Id,
+                Name = x.Name
+            })
+            .SingleOrDefaultAsync();
+    }
+
     public async Task<GetAuthorsWithBooksDto> GetAuthorWithBooksById(long authorId)
     {
         return await this.context.Authors

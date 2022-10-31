@@ -41,14 +41,9 @@ public class TeachersController : ControllerBase
     [HttpDelete("Delete")]
     public async Task<IActionResult> Delete([FromQuery] long id)
     {
-        var result = await this.service.Delete(id);
+        await this.service.Delete(id);
 
-        if (result)
-        {
-            return Ok();
-        }
-
-        return BadRequest("Error");
+        return Ok();
     }
 
     [HttpPatch("Update")]
@@ -58,7 +53,7 @@ public class TeachersController : ControllerBase
 
         if (result)
         {
-            return Ok("Success");
+            return Ok();
         }
 
         return StatusCode(500, "Error");

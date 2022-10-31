@@ -39,13 +39,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         throw new NotImplementedException();
     }
 
-    public async Task<bool> Delete(T obj)
+    public async Task Delete(T obj)
     {
         this.table.Remove(obj);
-
-        var result = await this.context.SaveChangesAsync();
-
-        return result > 0;
+        await this.context.SaveChangesAsync();
     }
 
     public async Task<T> GetById(long id)

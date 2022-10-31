@@ -8,4 +8,5 @@ public interface IStudentService
     Task<IEnumerable<GetStudentsDto>> GetStudentsByName(string name);
     Task<GetStudentWithTransactionsDto> GetStudentWithTransactionsById(long studentId);
     Task<bool> UpdateStudentTeacher(UpdateStudentTeacherDto updateStudentDto);
+    Task Delete(long id);
 }

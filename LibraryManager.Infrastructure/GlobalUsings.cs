@@ -6,6 +6,7 @@ global using LibraryManager.Domain.Dtos.Students;
 global using LibraryManager.Domain.Dtos.Teacher;
 global using LibraryManager.Domain.Dtos.Transactions;
 global using LibraryManager.Domain.Entities;
+global using LibraryManager.Domain.Exceptions;
 global using LibraryManager.Infrastructure.Repositories.Abstractions;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Query;

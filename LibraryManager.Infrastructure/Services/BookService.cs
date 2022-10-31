@@ -1,6 +1,4 @@
-﻿using LibraryManager.Domain.Exceptions;
-
-namespace LibraryManager.Infrastructure.Services;
+﻿namespace LibraryManager.Infrastructure.Services;
 
 public class BookService : IBookService
 {
@@ -195,15 +193,9 @@ public class BookService : IBookService
             var book = await this.bookRepository.GetById(updateBook.Id);
             if (book != null)
             {
-                if (!string.IsNullOrEmpty(updateBook.Title))
-                {
-                    book.Title = updateBook.Title;
-                }
-
-                if (!string.IsNullOrEmpty(updateBook.Description))
-                {
-                    book.Description = updateBook.Description;
-                }
+                book.Title = updateBook.Title;
+                book.Description = updateBook.Description;
+                book.AuthorId = updateBook.AuthorId;
 
                 return await this.bookRepository.Save();
             }

@@ -121,4 +121,18 @@ public class StudentService : IStudentService
             throw;
         }
     }
+
+    async Task IStudentService.Delete(long id)
+    {
+        try
+        {
+            var teacher = await this.repository.GetById(id);
+            await this.repository.Delete(teacher);
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, "An error occurred while deleting the student {studentId}.", id);
+            throw new HttpResponseException(400, "An Error occurred while deleting the student.");
+        }
+    }
 }

@@ -47,7 +47,7 @@ public class AuthorsController : ControllerBase
 
         if (result)
         {
-            return Ok("Author was created");
+            return Ok();
         }
 
         return StatusCode(500, "Unexpected error");
@@ -64,5 +64,29 @@ public class AuthorsController : ControllerBase
         var author = await this.service.GetAuthorWithBooksById(authorId);
 
         return Ok(author);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Edit(EditAtuhorDto editAuthorDto)
+    {
+        await this.service.Edit(editAuthorDto);
+
+        return Ok();
+    }
+
+    [HttpGet("GetAuthorById")]
+    public async Task<IActionResult> GetAuthorById(long id)
+    {
+        var author = await this.service.GetAuthorById(id);
+
+        return Ok(author);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromQuery] long id)
+    {
+        await this.service.Delete(id);
+
+        return Ok();
     }
 }

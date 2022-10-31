@@ -48,6 +48,7 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
             .Select(x => new GetBooksDto
             {
                 AuthorName = x.Author.Name,
+                AuthorId = x.Author.Id,
                 BookId = x.Id,
                 Description = x.Description,
                 Reference = x.Reference,

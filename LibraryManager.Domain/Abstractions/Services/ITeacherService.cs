@@ -6,7 +6,7 @@ public interface ITeacherService
     Task<bool> Create(CreateTeacherDto teacher);
     Task<Teacher> GetByEmailAndPassword(string email, string password);
     Task<IEnumerable<GetTeacherWithStudentsDto>> GetTeachersWithStudents();
-    Task<bool> Delete(long id);
+    Task Delete(long id);
     Task<bool> UpdateTeacher(UpdateTeacherDto updateTeacher);
     Task<GetTeacherDto> GetById(long id);
 }

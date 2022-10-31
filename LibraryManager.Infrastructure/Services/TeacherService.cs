@@ -78,7 +78,7 @@ public class TeacherService : ITeacherService
         }
     }
 
-    public async Task<bool> Delete(long id)
+    public async Task Delete(long id)
     {
         try
         {
@@ -86,10 +86,8 @@ public class TeacherService : ITeacherService
 
             if (teacher != null)
             {
-                return await this.repository.Delete(teacher);
+                await this.repository.Delete(teacher);
             }
-
-            return false;
         }
         catch (Exception e)
         {

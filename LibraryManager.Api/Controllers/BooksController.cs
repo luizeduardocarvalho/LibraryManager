@@ -135,7 +135,7 @@ public class BooksController : ControllerBase
 
         if (result)
         {
-            return Ok("Success!");
+            return Ok();
         }
 
         return StatusCode(500, "An error has occurred.");

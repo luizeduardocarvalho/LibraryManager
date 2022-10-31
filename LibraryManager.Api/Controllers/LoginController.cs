@@ -68,7 +68,7 @@ public class LoginController : ControllerBase
 
         if (result)
         {
-            return Ok("Change Password");
+            return Ok();
         }
 
         return StatusCode(500, "An error has occurred.");
