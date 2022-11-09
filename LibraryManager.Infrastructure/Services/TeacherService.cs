@@ -50,11 +50,11 @@ public class TeacherService : ITeacherService
         }
     }
 
-    public async Task<Teacher> GetByEmailAndPassword(string email, string password)
+    public async Task<User> GetByEmailAndPassword(string email, string password)
     {
         try
         {
-            var teacher = await this.repository.GetByEmailAndPassword(email, password);
+            User teacher = await this.repository.GetByEmailAndPassword(email, password);
 
             return teacher;
         }

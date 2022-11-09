@@ -26,11 +26,20 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
             .ToListAsync();
     }
 
-    public async Task<Teacher> GetByEmailAndPassword(string email, string password)
+    public async Task<User> GetByEmailAndPassword(string email, string password)
     {
-        var teacher = await this.context.Teachers.FirstOrDefaultAsync(
+        User teacher = await this.context.Teachers.FirstOrDefaultAsync(
             x => string.Equals(x.Email, email)
             && string.Equals(x.Password, password));
+
+        if(teacher is null)
+        {
+            var user = await this.context.Students.FirstOrDefaultAsync(
+                x => string.Equals(x.Email, email)
+                && string.Equals(x.Password, password));
+
+            return user;
+        }
 
         return teacher;
     }
