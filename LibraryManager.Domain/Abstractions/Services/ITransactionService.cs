@@ -7,4 +7,6 @@ public interface ITransactionService
     Task<IEnumerable<LateBookWithStudentNameDto>> GetLateBooksWithStudentName(long teacherId);
     Task<IEnumerable<Transaction>> GetAllActiveTransactions();
     Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId);
+    Task<IList<GetBookDto>> GetMostLentBooks();
+    Task<IList<GetBookDto>> GetLeastLentBooks();
 }

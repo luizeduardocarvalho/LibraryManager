@@ -1,10 +1,4 @@
-﻿using LibraryManager.Domain.Dtos.Books;
-using LibraryManager.Domain.Dtos.Transactions;
-using LibraryManager.Domain.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace LibraryManager.Infrastructure.Repositories.Abstractions
+﻿namespace LibraryManager.Infrastructure.Repositories.Abstractions
 {
     public interface ITransactionRepository : IBaseRepository<Transaction>
     {
@@ -14,5 +8,7 @@ namespace LibraryManager.Infrastructure.Repositories.Abstractions
         Task<IEnumerable<Transaction>> GetAllActiveTransactions();
         Task<IEnumerable<GetTransactionDto>> GetTransactionsWithDetailsByStudent(long studentId);
         Task<bool> HasBookBorrowed(long studentId);
+        Task<IList<GetBookDto>> GetMostLentBooks();
+        Task<IList<GetBookDto>> GetLeastLentBooks();
     }
 }

@@ -89,4 +89,54 @@ public class TransactionRepository : BaseRepository<Transaction>, ITransactionRe
 
         return result is not null;
     }
+
+    async Task<IList<GetBookDto>> ITransactionRepository.GetMostLentBooks()
+    {
+        var result = await this.context.Transactions
+            .Include(x => x.Book)
+            .GroupBy(x => x.BookId)
+            .Select(x => new
+            {
+                Key = x.Key,
+                Books = x.ToList(),
+                Count = x.Count()
+            })
+            .OrderByDescending(x => x.Count)
+            .Take(10)
+            .ToListAsync();
+
+        return result
+            .SelectMany(x => x.Books, (key, transaction) => new GetBookDto
+            {
+                BookId = transaction.Book.Id,
+                Title = transaction.Book.Title
+            })
+            .DistinctBy(x => x.BookId)
+            .ToList();
+    }
+
+    async Task<IList<GetBookDto>> ITransactionRepository.GetLeastLentBooks()
+    {
+        var result = await this.context.Transactions
+            .Include(x => x.Book)
+            .GroupBy(x => x.BookId)
+            .Select(x => new
+            {
+                Key = x.Key,
+                Books = x.ToList(),
+                Count = x.Count()
+            })
+            .OrderBy(x => x.Count)
+            .Take(10)
+            .ToListAsync();
+
+        return result
+            .SelectMany(x => x.Books, (key, transaction) => new GetBookDto
+            {
+                BookId = transaction.Book.Id,
+                Title = transaction.Book.Title
+            })
+            .DistinctBy(x => x.BookId)
+            .ToList();
+    }
 }
