@@ -81,7 +81,7 @@ public class BookService : IBookService
                 };
 
                 this.transactionRepository.Insert(transaction);
-                return await this.bookRepository.Save();
+                return await this.transactionRepository.Save();
             }
         }
         catch (Exception e)
