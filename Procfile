@@ -1,1 +1,1 @@
-web: dotnet LibraryManager.Api.dll
+web: dotnet out/LibraryManager.Api.dll
