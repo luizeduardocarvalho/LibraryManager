@@ -1,1 +1,1 @@
-web: dotnet LibraryManager.Api.dll
+web: ASPNETCORE_URLS=http://+:5000 dotnet LibraryManager.Api.dll
