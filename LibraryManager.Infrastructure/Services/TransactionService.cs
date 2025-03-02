@@ -1,6 +1,4 @@
-﻿using LibraryManager.Domain.Entities;
-
-namespace LibraryManager.Infrastructure.Services;
+﻿namespace LibraryManager.Infrastructure.Services;
 
 public class TransactionService : ITransactionService
 {
@@ -78,6 +76,32 @@ public class TransactionService : ITransactionService
         catch (Exception e)
         {
             logger.LogError(e, "An error occurred while getting the transaction list for the student {studentId}.", studentId);
+            throw;
+        }
+    }
+
+    async Task<IList<GetBookDto>> ITransactionService.GetMostLentBooks()
+    {
+        try
+        {
+            return await this.repository.GetMostLentBooks();
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, "An error occurred while getting the most lent books.");
+            throw;
+        }
+    }
+
+    async Task<IList<GetBookDto>> ITransactionService.GetLeastLentBooks()
+    {
+        try
+        {
+            return await this.repository.GetLeastLentBooks();
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, "An error occurred while getting the least lent books.");
             throw;
         }
     }

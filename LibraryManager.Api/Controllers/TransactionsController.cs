@@ -65,4 +65,20 @@ public class TransactionsController : ControllerBase
 
         return Ok(transactions);
     }
+
+    [HttpGet("GetMostLentBooks")]
+    public async Task<IActionResult> GetMostLentBooks()
+    {
+        var result = await this.service.GetMostLentBooks();
+
+        return Ok(result);
+    }
+
+    [HttpGet("GetLeastLentBooks")]
+    public async Task<IActionResult> GetLeastLentBooks()
+    {
+        var result = await this.service.GetMostLentBooks();
+
+        return Ok(result);
+    }
 }
