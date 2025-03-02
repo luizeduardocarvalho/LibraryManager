@@ -19,7 +19,6 @@ public class AuthService : IAuthService
     public async Task<bool> Register(RegisterDto registerDto)
     {
         var reference = await this.repository.GetLastReference() + 1;
-
         var user = new Teacher
         {
             Email = registerDto.Email,
