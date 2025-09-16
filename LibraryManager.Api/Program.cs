@@ -127,9 +127,10 @@ app.UseRouting();
 
 app.UseCors(
     options => options
-        .WithOrigins(
-            "https://librarymanager-web-staging.herokuapp.com",
-            "https://librarymanager-web.herokuapp.com")
+        .AllowAnyOrigin()
+        // .WithOrigins(
+        //     "https://librarymanager-web-staging.herokuapp.com",
+        //     "https://librarymanager-web.herokuapp.com")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
