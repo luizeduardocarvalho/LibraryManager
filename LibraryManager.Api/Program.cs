@@ -1,14 +1,29 @@
+using Microsoft.AspNetCore.HttpOverrides;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole();
 
-builder.Services.AddCors();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<HttpResponseExceptionFilter>();
 });
 
+var corsOriginsEnv = Environment.GetEnvironmentVariable("CORS_ORIGINS");
+var allowedOrigins = (corsOriginsEnv ?? "https://librarymanager-web.herokuapp.com,https://librarymanager-web-staging.herokuapp.com")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy("SpaPolicy", p =>
+    {
+        p.WithOrigins(allowedOrigins)
+         .AllowAnyHeader()
+         .AllowAnyMethod();
+    });
+});
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
@@ -57,13 +72,11 @@ builder.Services.AddDbContext<LibraryManagerDbContext>(
             GetConnectionString(builder.Configuration),
             x => x.MigrationsAssembly("LibraryManager.Infrastructure")));
 
-// Settings configuration
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
 
 var settings = Environment.GetEnvironmentVariable("Settings")
                 ?? builder.Configuration.GetSection("Settings").GetSection("Secret").Value;
 
-// Authentication
 builder.Services
     .AddAuthentication(x =>
     {
@@ -104,20 +117,22 @@ builder.Services.AddTransient<IEncryptService, EncryptService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-// Enable Swagger in Development and Staging
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
 }
 
-// Only use HTTPS redirection if not running on Heroku (Heroku handles SSL termination)
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 if (Environment.GetEnvironmentVariable("DYNO") == null)
 {
     app.UseHttpsRedirection();
@@ -125,15 +140,7 @@ if (Environment.GetEnvironmentVariable("DYNO") == null)
 
 app.UseRouting();
 
-app.UseCors(
-    options => options
-        .AllowAnyOrigin()
-        // .WithOrigins(
-        //     "https://librarymanager-web-staging.herokuapp.com",
-        //     "https://librarymanager-web.herokuapp.com")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-);
+app.UseCors("SpaPolicy");  
 
 app.UseAuthentication();
 
