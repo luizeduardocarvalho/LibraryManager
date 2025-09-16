@@ -125,10 +125,6 @@ if (Environment.GetEnvironmentVariable("DYNO") == null)
 
 app.UseRouting();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.UseCors(
     options => options
         .WithOrigins(
@@ -137,6 +133,10 @@ app.UseCors(
         .AllowAnyMethod()
         .AllowAnyHeader()
 );
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
 
