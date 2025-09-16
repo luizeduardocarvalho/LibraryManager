@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: librarymanager-db
+    environment:
+      POSTGRES_DB: librarymanager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - librarymanager-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Library Manager API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: librarymanager-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/librarymanager
+      - Settings__Secret=your-secret-key-here-change-in-production
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - librarymanager-network
+    volumes:
+      - ./LibraryManager.Api/appsettings.Development.json:/app/appsettings.Development.json:ro
+
+  # Redis Cache (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: librarymanager-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - librarymanager-network
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  librarymanager-network:
+    driver: bridge
