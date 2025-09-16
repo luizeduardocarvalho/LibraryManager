@@ -1,0 +1,36 @@
+# Development Dockerfile with hot reload support
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS development
+WORKDIR /src
+
+# Install dotnet tools
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Copy project files and restore dependencies
+COPY ["LibraryManager.Api/LibraryManager.Api.csproj", "LibraryManager.Api/"]
+COPY ["LibraryManager.Infrastructure/LibraryManager.Infrastructure.csproj", "LibraryManager.Infrastructure/"]
+COPY ["LibraryManager.Domain/LibraryManager.Domain.csproj", "LibraryManager.Domain/"]
+COPY ["LibraryManager.UnitTests/LibraryManager.UnitTests.csproj", "LibraryManager.UnitTests/"]
+RUN dotnet restore "LibraryManager.Api/LibraryManager.Api.csproj"
+
+# Copy all source code
+COPY . .
+
+# Set working directory to API project
+WORKDIR /src/LibraryManager.Api
+
+# Expose ports
+EXPOSE 80
+EXPOSE 443
+
+# Set environment variables for development
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
+# Install development certificates
+RUN dotnet dev-certs https --trust
+
+# Start the application with hot reload
+CMD ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080"]

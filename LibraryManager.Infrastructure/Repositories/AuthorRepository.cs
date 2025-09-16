@@ -14,7 +14,7 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
     {
         return await this.context.Authors
             .Where(x => x.Name.ToLower().Contains(authorName.ToLower()))
-            .Select(x => 
+            .Select(x =>
                 new GetAuthorDto
                 {
                     AuthorId = x.Id,
@@ -58,8 +58,8 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
                 {
                     AuthorId = x.Id,
                     Name = x.Name,
-                    Books = x.Books.Select(b => 
-                        new GetBooksDto 
+                    Books = x.Books.Select(b =>
+                        new GetBooksDto
                         {
                             BookId = b.Id,
                             Description = b.Description,

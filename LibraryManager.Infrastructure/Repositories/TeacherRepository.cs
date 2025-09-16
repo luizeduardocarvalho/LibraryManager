@@ -32,7 +32,7 @@ public class TeacherRepository : BaseRepository<Teacher>, ITeacherRepository
             x => string.Equals(x.Email, email)
             && string.Equals(x.Password, password));
 
-        if(teacher is null)
+        if (teacher is null)
         {
             var user = await this.context.Students.FirstOrDefaultAsync(
                 x => string.Equals(x.Email, email)
