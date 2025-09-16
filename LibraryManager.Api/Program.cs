@@ -118,10 +118,18 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
+// Enable Swagger in Development and Staging
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManager.Api v1"));
+}
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection if not running on Heroku (Heroku handles SSL termination)
+if (Environment.GetEnvironmentVariable("DYNO") == null)
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseRouting();
 

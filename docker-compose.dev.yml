@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Development API with hot reload
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: librarymanager-api-dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/librarymanager
+      - Settings__Secret=dev-secret-key-not-for-production
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - librarymanager-network
+    volumes:
+      # Mount source code for hot reload
+      - ./LibraryManager.Api:/src/LibraryManager.Api
+      - ./LibraryManager.Domain:/src/LibraryManager.Domain
+      - ./LibraryManager.Infrastructure:/src/LibraryManager.Infrastructure
+      - ./LibraryManager.UnitTests:/src/LibraryManager.UnitTests
+      # Mount appsettings for easy configuration changes
+      - ./LibraryManager.Api/appsettings.Development.json:/src/LibraryManager.Api/appsettings.Development.json
+    stdin_open: true
+    tty: true
+
+  # PostgreSQL Database (same as production)
+  postgres:
+    image: postgres:15-alpine
+    container_name: librarymanager-db-dev
+    environment:
+      POSTGRES_DB: librarymanager_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - librarymanager-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache for development
+  redis:
+    image: redis:7-alpine
+    container_name: librarymanager-redis-dev
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    networks:
+      - librarymanager-network
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+
+networks:
+  librarymanager-network:
+    driver: bridge
