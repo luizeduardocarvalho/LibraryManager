@@ -1,25 +1,17 @@
-using LibraryManager.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using LibraryManager.Api.Filters;
-using LibraryManager.Api.Configurations;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Clear providers and add configuration logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
-// Add services to the container
 builder.Services.AddCors();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<HttpResponseExceptionFilter>();
 });
+
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 builder.Services.AddSwaggerGen(c =>
 {

@@ -29,6 +29,7 @@ RUN dotnet publish "LibraryManager.Api.csproj" -c $BUILD_CONFIGURATION -o /app/p
 
 FROM base AS final
 WORKDIR /app
+ENV ASPNETCORE_URLS=http://+:$PORT
 COPY --from=publish /app/publish .
 
 ENTRYPOINT ["dotnet", "LibraryManager.Api.dll"]
