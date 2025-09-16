@@ -133,7 +133,6 @@ app.UseCors(
         //     "https://librarymanager-web.herokuapp.com")
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .AllowCredentials()
 );
 
 app.UseAuthentication();
